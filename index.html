@@ -2,392 +2,647 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-<title>📚 My Bookshelf 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📚 Reading Shelf 2026 — Snowdarkz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#110a04;--text:#f5e6d0;--dim:#b8966a;--gold:#e8c87a;--goldfx:rgba(232,200,122,.18)}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:radial-gradient(ellipse 90% 55% at 50% -5%,rgba(200,110,30,.14) 0%,transparent 65%),
-             radial-gradient(ellipse 50% 35% at 10% 100%,rgba(140,70,10,.1) 0%,transparent 55%)}
+  :root {
+    --bg: #0a0a08;
+    --wood-dark: #1a1208;
+    --wood-mid: #2a1f0e;
+    --wood-light: #3d2e16;
+    --shelf-surface: #4a3820;
+    --shelf-edge: #6b5230;
+    --gold: #e8c87a;
+    --gold-dim: #a8883a;
+    --gold-bright: #f5d98e;
+    --text-main: #e8dfc8;
+    --text-dim: #9a8a6a;
+    --c1: #8b2333; /* Burgundy */
+    --c2: #1a3a5c; /* Navy */
+    --c3: #1e4a2e; /* Forest Green */
+    --c4: #7a4a0a; /* Amber */
+    --c5: #4a1a3a; /* Deep Purple */
+    --c6: #1a2a4a; /* Midnight Blue */
+    --c7: #5a1a1a; /* Deep Red */
+    --c8: #2a4a1a; /* Dark Olive */
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.page{position:relative;z-index:1;padding:clamp(24px,5vw,56px) clamp(14px,4vw,40px) 60px;max-width:1200px;margin:0 auto}
+  body {
+    background: var(--bg);
+    background-image: 
+      radial-gradient(ellipse at 20% 10%, #1f1508 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 90%, #120e04 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    color: var(--text-main);
+    font-family: 'Sarabun', sans-serif;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
 
-/* HEADER */
-header{text-align:center;margin-bottom:clamp(22px,4vw,44px)}
-header h1{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,5vw,3rem);color:var(--gold);letter-spacing:.05em;text-shadow:0 2px 24px rgba(232,200,122,.35);margin-bottom:5px}
-.sub{color:var(--dim);font-size:clamp(.75rem,2vw,.9rem);font-weight:300;letter-spacing:.1em}
-.upd{margin-top:6px;font-size:.68rem;color:var(--dim);opacity:.45;letter-spacing:.08em}
+  /* ── Header ── */
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  .page-header::before {
+    content: '';
+    display: block;
+    width: 120px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 1.2rem;
+  }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    color: var(--gold-bright);
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 40px rgba(232,200,122,0.25);
+  }
+  .page-header .subtitle {
+    font-size: 0.85rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 0.4rem;
+  }
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .page-header::after {
+    content: '';
+    display: block;
+    width: 120px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1.2rem auto 0;
+  }
 
-/* STATS */
-.stats{display:flex;gap:clamp(16px,4vw,44px);justify-content:center;flex-wrap:wrap;margin-bottom:clamp(24px,4vw,44px)}
-.stat{text-align:center}
-.stat-n{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,3.5vw,1.9rem);color:var(--gold);display:block;line-height:1}
-.stat-l{font-size:clamp(.6rem,1.4vw,.72rem);color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+  /* ── Shelf Container ── */
+  .shelf-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+  }
 
-/* SHELF */
-.shelf-unit{margin-bottom:clamp(36px,5vw,60px)}
-.shelf-lbl{font-family:'Playfair Display',serif;font-size:clamp(.65rem,1.6vw,.8rem);color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;padding-left:2px}
-.shelf-wrap{width:100%;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.shelf-wrap::-webkit-scrollbar{display:none}
-.shelf-back{position:relative;background:linear-gradient(170deg,#1a0902 0%,#2d1408 45%,#1a0902 100%);
-  border-radius:3px 3px 0 0;padding:clamp(26px,3.2vw,36px) clamp(10px,1.5vw,18px) 0;width:100%;min-width:max-content}
-.shelf-back::before{content:'';position:absolute;inset:0;border-radius:3px 3px 0 0;
-  background:repeating-linear-gradient(90deg,transparent 0,transparent 56px,rgba(0,0,0,.05) 56px,rgba(0,0,0,.05) 57px);pointer-events:none}
-.shelf-back::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40px;
-  background:linear-gradient(to top,rgba(180,100,30,.07),transparent);pointer-events:none}
-.books-row{position:relative;z-index:1;display:flex;align-items:flex-end;gap:0;min-height:clamp(120px,16vw,185px)}
-.shelf-plank{height:clamp(13px,1.8vw,19px);width:100%;min-width:max-content;
-  background:linear-gradient(to bottom,#d4924e 0%,#b07840 28%,#7a4e20 68%,#5a3510 100%);
-  border-radius:0 0 3px 3px;
-  box-shadow:0 8px 22px rgba(0,0,0,.7),inset 0 2px 0 rgba(255,255,255,.08),inset 0 -2px 5px rgba(0,0,0,.45)}
+  /* ── Single Shelf Row ── */
+  .shelf-row {
+    position: relative;
+    margin-bottom: 3.5rem;
+  }
 
-/* BOOK WRAPPER */
-.bw{position:relative;display:flex;align-items:flex-end;flex-shrink:0}
-.dpin{position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);
-  white-space:nowrap;font-size:8px;font-weight:600;color:var(--gold);opacity:.32;
-  letter-spacing:.03em;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.9);line-height:1;transition:opacity .2s}
-.dpin.nd{opacity:.85}
-.dtick{position:absolute;bottom:calc(100% + 1px);left:50%;transform:translateX(-50%);
-  width:1px;height:5px;background:var(--gold);opacity:.16;pointer-events:none}
-.dtick.nd{opacity:.5}
-.bw:hover .dpin{opacity:1}
-.sgap{width:clamp(4px,.8vw,8px);flex-shrink:0}
+  /* The wooden plank */
+  .shelf-plank {
+    position: relative;
+    background: linear-gradient(180deg, var(--shelf-surface) 0%, #3a2c18 60%, var(--wood-mid) 100%);
+    border-top: 3px solid var(--shelf-edge);
+    padding: 0 12px 8px 12px;
+    min-height: 80px;
+    box-shadow:
+      0 6px 20px rgba(0,0,0,0.7),
+      inset 0 1px 0 rgba(255,220,120,0.08),
+      inset 0 -2px 4px rgba(0,0,0,0.4);
+    border-radius: 0 0 4px 4px;
+  }
+  /* Wood grain lines */
+  .shelf-plank::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      rgba(0,0,0,0.04) 1px,
+      transparent 2px,
+      transparent 18px
+    );
+    pointer-events: none; border-radius: inherit;
+  }
 
-/* BOOK */
-.book{position:relative;cursor:pointer;flex-shrink:0;transform-origin:bottom center;
-  transition:transform .22s cubic-bezier(.34,1.5,.64,1);-webkit-tap-highlight-color:transparent}
-.book:hover,.book.touched{transform:translateY(-28px) scale(1.05);z-index:50}
-.spine{display:flex;align-items:center;justify-content:center;overflow:hidden;
-  border-radius:1px 1px 0 0;position:relative;
-  box-shadow:inset -3px 0 9px rgba(0,0,0,.4),inset 2px 0 5px rgba(255,255,255,.12),2px 0 6px rgba(0,0,0,.35);
-  transition:box-shadow .22s}
-.spine::before{content:'';position:absolute;top:0;left:0;width:26%;height:100%;
-  background:linear-gradient(to right,rgba(255,255,255,.15),transparent);pointer-events:none;z-index:1}
-.spine::after{content:'';position:absolute;top:0;right:0;width:16%;height:100%;
-  background:linear-gradient(to left,rgba(0,0,0,.25),transparent);pointer-events:none;z-index:1}
-.book:hover .spine,.book.touched .spine{
-  box-shadow:inset -3px 0 9px rgba(0,0,0,.4),inset 2px 0 5px rgba(255,255,255,.12),5px 0 20px rgba(0,0,0,.6),0 12px 32px rgba(0,0,0,.5)}
-.stxt{writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);
-  font-size:clamp(7px,1.1vw,10px);font-family:'Sarabun',sans-serif;font-weight:600;
-  text-shadow:0 1px 3px rgba(0,0,0,.65);padding:5px 2px;white-space:nowrap;overflow:hidden;
-  text-overflow:ellipsis;max-height:90%;line-height:1.2;letter-spacing:.04em;position:relative;z-index:2}
+  /* Date label above shelf */
+  .shelf-date-label {
+    position: absolute;
+    top: -1.8rem;
+    left: 0;
+    font-size: 0.72rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    font-family: 'Sarabun', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    opacity: 0.9;
+    padding: 2px 8px;
+    background: rgba(232,200,122,0.07);
+    border-left: 2px solid var(--gold-dim);
+  }
+  .shelf-date-label.new-date {
+    color: var(--gold-bright);
+    background: rgba(232,200,122,0.12);
+    border-left-color: var(--gold);
+    text-shadow: 0 0 12px rgba(232,200,122,0.4);
+  }
 
-/* TOOLTIP */
-#tt{position:fixed;width:260px;
-  background:linear-gradient(150deg,#1f100a 0%,#2d1a0d 60%,#1a0e07 100%);
-  border:1px solid var(--goldfx);border-radius:12px;pointer-events:none;
-  opacity:0;transition:opacity .18s ease,transform .18s ease;transform:translateY(6px);z-index:9999;
-  box-shadow:0 20px 60px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.04),inset 0 1px 0 rgba(232,200,122,.06);
-  overflow:hidden}
-#tt.vis{opacity:1;transform:translateY(0)}
-@media(max-width:600px){
-  #tt{width:min(90vw,300px);left:50%!important;transform:translateX(-50%) translateY(6px)!important}
-  #tt.vis{transform:translateX(-50%) translateY(0)!important}
-}
-#tt-img{width:100%;height:300px;object-fit:cover;object-position:top center;display:block;background:#2a1206}
-#tt-nc{width:100%;height:300px;background:linear-gradient(135deg,#3a1c08,#6b3a1f);display:flex;align-items:center;justify-content:center;font-size:3rem}
-.tt-shine{height:1px;background:linear-gradient(to right,transparent,var(--goldfx),var(--gold),var(--goldfx),transparent)}
-.tt-body{padding:13px 15px 16px}
-.tt-title{font-family:'Playfair Display',serif;font-size:.84rem;color:var(--gold);line-height:1.38;margin-bottom:9px;font-weight:700}
-.tt-div{height:1px;background:linear-gradient(to right,transparent,var(--goldfx),transparent);margin:7px 0}
-.tt-meta{display:flex;flex-direction:column;gap:5px}
-.tt-row{display:flex;gap:7px;align-items:flex-start;font-size:.73rem;color:var(--dim);line-height:1.45}
-.tt-row .ic{flex-shrink:0;width:15px;opacity:.85}
-.tt-row strong{color:var(--text);font-weight:400}
+  /* Books container inside plank */
+  .books-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    padding: 10px 4px 4px;
+    flex-wrap: nowrap;
+    overflow-x: visible;
+  }
 
-/* BOXES */
-.box{border:1px solid rgba(232,200,122,.13);border-radius:10px;
-  background:linear-gradient(145deg,#1a0e06,#120a04);padding:24px 24px 22px;
-  box-shadow:inset 0 1px 0 rgba(232,200,122,.05)}
-.box-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
-.box-hd-title{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;opacity:.85}
-.copy-btn{background:rgba(232,200,122,.1);border:1px solid rgba(232,200,122,.3);border-radius:6px;
-  color:var(--gold);font-family:'Sarabun',sans-serif;font-size:.76rem;
-  padding:6px 14px;cursor:pointer;letter-spacing:.05em;transition:background .2s;white-space:nowrap}
-.copy-btn:hover{background:rgba(232,200,122,.2)}
+  /* ── Single Book Spine ── */
+  .book-spine {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 2px 1px 1px 2px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .book-spine:hover {
+    transform: translateY(-12px) scale(1.04);
+    z-index: 10;
+    filter: brightness(1.12);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.8), 0 0 0 1px rgba(232,200,122,0.25);
+  }
+  /* Spine left edge highlight */
+  .book-spine::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.06) 100%);
+    border-radius: 2px 0 0 2px;
+  }
+  /* Spine right shadow */
+  .book-spine::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: rgba(0,0,0,0.35);
+    border-radius: 0 1px 1px 0;
+  }
 
-/* STEPS */
-.steps{display:flex;flex-direction:column;gap:14px}
-.step{display:flex;gap:14px;align-items:flex-start}
-.step-n{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--gold);
-  min-width:26px;line-height:1.4;flex-shrink:0;opacity:.9}
-.step-title{font-size:.82rem;color:var(--text);font-weight:600;margin-bottom:3px;line-height:1.4}
-.step-desc{font-size:.76rem;color:var(--dim);line-height:1.65}
-.step-desc strong{color:var(--text);font-weight:600}
-.step-desc em{color:rgba(245,230,208,.75);font-style:italic}
-.note-text{font-size:.78rem;color:var(--dim);line-height:1.85}
-.note-text strong{color:var(--text);font-weight:600}
+  .book-spine-inner {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-family: 'Sarabun', sans-serif;
+    font-size: clamp(7px, 1.2vw, 11px);
+    font-weight: 600;
+    color: rgba(255,255,255,0.88);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    padding: 8px 2px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 95%;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+    user-select: none;
+  }
 
-/* PROMPT */
-#prompt-txt{white-space:pre-wrap;word-break:break-word;font-family:'Sarabun',sans-serif;
-  font-size:.76rem;line-height:1.8;color:var(--dim);margin:0;user-select:all}
+  /* Decorative gold line on spine */
+  .book-spine .spine-line {
+    position: absolute;
+    left: 4px; right: 4px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(232,200,122,0.5), transparent);
+    pointer-events: none;
+  }
+  .book-spine .spine-line:first-of-type { top: 14px; }
+  .book-spine .spine-line:last-of-type { bottom: 14px; }
 
-/* BOOK LIST */
-.divider{height:1px;background:linear-gradient(to right,transparent,rgba(232,200,122,.15),transparent);margin:52px 0 36px}
-.bl-title{font-family:'Playfair Display',serif;font-size:clamp(.85rem,2vw,1rem);
-  color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;opacity:.85}
-.bl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
-.bl-card{background:rgba(26,14,6,.7);border:1px solid rgba(232,200,122,.09);
-  border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:3px;
-  transition:border-color .2s}
-.bl-card:hover{border-color:rgba(232,200,122,.25)}
-.bl-name{font-size:.82rem;color:var(--text);font-weight:600;line-height:1.45;margin-bottom:2px}
-.bl-author{font-size:.72rem;color:var(--dim);opacity:.85}
-.bl-pub{font-size:.72rem;color:var(--dim);opacity:.65}
-.bl-link-slot{margin-top:9px;padding-top:9px;border-top:1px dashed rgba(232,200,122,.12)}
-.bl-link-slot a{font-size:.72rem;color:var(--gold);opacity:.5;text-decoration:none;
-  letter-spacing:.03em;transition:opacity .2s;display:inline-block}
-.bl-link-slot a:hover{opacity:1}
-.bl-link-empty{font-size:.7rem;color:var(--dim);opacity:.28;font-style:italic;letter-spacing:.02em}
+  /* ── Tooltip ── */
+  #tooltip {
+    position: fixed;
+    display: none;
+    z-index: 9999;
+    background: linear-gradient(145deg, #1e1508, #2a1e0e, #1a1208);
+    border: 1px solid var(--gold-dim);
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.85), 0 0 0 1px rgba(232,200,122,0.1), inset 0 1px 0 rgba(255,220,120,0.06);
+    padding: 0;
+    max-width: 280px;
+    min-width: 220px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  #tooltip .tip-cover {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    background: var(--wood-dark);
+  }
+  #tooltip .tip-cover-placeholder {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, var(--wood-mid), var(--wood-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--gold-dim);
+  }
+  #tooltip .tip-body {
+    padding: 12px 14px 14px;
+    border-top: 1px solid rgba(232,200,122,0.15);
+  }
+  #tooltip .tip-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    color: var(--gold-bright);
+    line-height: 1.35;
+    margin-bottom: 6px;
+  }
+  #tooltip .tip-row {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-bottom: 3px;
+    display: flex;
+    gap: 6px;
+  }
+  #tooltip .tip-row span.label { color: var(--gold-dim); font-weight: 600; min-width: 60px; }
+  #tooltip .tip-row span.value { color: var(--text-main); }
+  #tooltip .tip-date {
+    font-size: 0.7rem;
+    color: var(--gold);
+    margin-top: 8px;
+    letter-spacing: 0.08em;
+    text-align: right;
+  }
+
+  /* ── Bottom Book List ── */
+  .section-divider {
+    max-width: 900px;
+    margin: 4rem auto 2rem;
+    text-align: center;
+    position: relative;
+  }
+  .section-divider::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    margin-bottom: 1rem;
+  }
+  .section-divider h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .book-list {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    background: rgba(232,200,122,0.06);
+    border: 1px solid rgba(232,200,122,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .book-list-item {
+    background: var(--wood-dark);
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(232,200,122,0.06);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    transition: background 0.15s;
+  }
+  .book-list-item:hover {
+    background: var(--wood-mid);
+  }
+  .book-list-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.75rem;
+    color: var(--gold-dim);
+    min-width: 26px;
+    padding-top: 2px;
+    text-align: right;
+  }
+  .book-list-info { flex: 1; }
+  .book-list-title {
+    font-size: 0.8rem;
+    color: var(--text-main);
+    line-height: 1.4;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .book-list-meta {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+  .book-list-meta .pub { color: var(--gold-dim); }
+  .book-list-date {
+    font-size: 0.65rem;
+    color: var(--gold);
+    min-width: 48px;
+    text-align: right;
+    padding-top: 2px;
+  }
+  .review-link-placeholder {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 4px;
+    padding: 2px 6px;
+    border: 1px dashed rgba(232,200,122,0.15);
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    body { padding: 1.5rem 0.5rem 3rem; }
+    .shelf-plank { padding: 0 6px 8px 6px; }
+    .books-row { gap: 2px; padding: 8px 2px 4px; }
+    .book-spine-inner { font-size: 7px; }
+    #tooltip {
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      top: auto !important;
+      bottom: 10px !important;
+      max-width: min(90vw, 280px);
+    }
+    .stats-row { gap: 1.5rem; }
+  }
 </style>
 </head>
 <body>
 
-<div id="tt">
-  <div id="tt-cw"></div>
-  <div class="tt-shine"></div>
-  <div class="tt-body">
-    <div id="tt-title" class="tt-title"></div>
-    <div class="tt-div"></div>
-    <div id="tt-meta" class="tt-meta"></div>
-  </div>
+<header class="page-header">
+  <h1>Reading Shelf 2026</h1>
+  <p class="subtitle">Snowdarkz &nbsp;·&nbsp; Year in Books</p>
+  <div class="stats-row" id="stats-row"></div>
+</header>
+
+<div class="shelf-wrapper" id="shelf-wrapper"></div>
+
+<div class="section-divider">
+  <h2>Complete Reading Log</h2>
 </div>
+<div class="book-list" id="book-list"></div>
 
-<div class="page">
-
-  <header>
-    <h1>📖 My Bookshelf 2026</h1>
-    <p class="sub">หนังสือที่อ่านจบในปี 2026</p>
-    <p class="upd">Last updated: 11 Mar 2026</p>
-  </header>
-
-  <div class="stats">
-    <div class="stat"><span class="stat-n">46</span><span class="stat-l">เล่ม</span></div>
-    <div class="stat"><span class="stat-n">20,043</span><span class="stat-l">หน้า</span></div>
-    <div class="stat"><span class="stat-n">100.2 cm</span><span class="stat-l">ความหนาสะสม</span></div>
-    <div class="stat"><span class="stat-n">17</span><span class="stat-l">ซีรีส์</span></div>
+<!-- Tooltip -->
+<div id="tooltip">
+  <div id="tip-img-container"></div>
+  <div class="tip-body">
+    <div class="tip-title" id="tip-title"></div>
+    <div class="tip-row"><span class="label">Author</span><span class="value" id="tip-author"></span></div>
+    <div class="tip-row"><span class="label">Publisher</span><span class="value" id="tip-pub"></span></div>
+    <div class="tip-row"><span class="label">Pages</span><span class="value" id="tip-pages"></span></div>
+    <div class="tip-row"><span class="label">Thickness</span><span class="value" id="tip-thick"></span></div>
+    <div class="tip-date" id="tip-date"></div>
   </div>
-
-  <div id="shelves"></div>
-
-  <!-- วิธีใช้ -->
-  <div class="box" style="margin-top:52px">
-    <div class="box-hd"><span class="box-hd-title">📖 วิธีใช้</span></div>
-    <div class="steps">
-      <div class="step">
-        <span class="step-n">1</span>
-        <div>
-          <div class="step-title">Export Bookmory as Database</div>
-          <div class="step-desc">เปิดแอป Bookmory → Settings → Export → เลือก <strong>Database (.db)</strong> → unzip แล้วหาไฟล์ <strong>bookmory.db</strong></div>
-        </div>
-      </div>
-      <div class="step">
-        <span class="step-n">2</span>
-        <div>
-          <div class="step-title">สร้าง Project ใน Claude</div>
-          <div class="step-desc">เปิด <strong>claude.ai</strong> → สร้าง Project ใหม่ → โยนไฟล์ <strong>bookmory.db</strong> เข้าไปใน Project Knowledge</div>
-        </div>
-      </div>
-      <div class="step">
-        <span class="step-n">3</span>
-        <div>
-          <div class="step-title">Copy prompt แล้ววางใน chat</div>
-          <div class="step-desc">กดปุ่ม <strong>📋 Copy Prompt</strong> ด้านล่าง แล้ว paste ใน chat ของ Project</div>
-        </div>
-      </div>
-      <div class="step">
-        <span class="step-n">4</span>
-        <div>
-          <div class="step-title">แก้บัค (ถ้ามี)</div>
-          <div class="step-desc">บอก Claude ตรงๆ เช่น <em>"tooltip ถูกตัด"</em> หรือ <em>"รูปปกไม่ขึ้น"</em></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- หมายเหตุ -->
-  <div class="box" style="margin-top:12px">
-    <div class="box-hd"><span class="box-hd-title">📝 หมายเหตุ</span></div>
-    <p class="note-text">
-      เลือกใช้ <strong>Bookmory</strong> เพราะมีข้อมูลจำนวนหน้าอยู่แล้ว ไม่ต้องไปหาเพิ่ม —
-      ถ้า copy ชื่อเรื่องมาเฉยๆ ส่วนมากไม่มีข้อมูลจำนวนหน้า
-      ช่วยแก้ปัญหาหนังสืออยู่หลายแอพด้วย ตอนแรกคิดจะใช้วิธีก็อปรายการที่สั่งซื้อใน <strong>Meb</strong> แต่ติดที่ไม่มีข้อมูลจำนวนหน้า
-      <br><br>
-      เลือกใช้ <strong>Claude</strong> เพราะถ้าให้ NotebookLM เจนเป็นรูป แล้วภาษาไทยมันอ่านไม่ออก
-    </p>
-  </div>
-
-  <!-- Prompt -->
-  <div class="box" style="margin-top:12px">
-    <div class="box-hd">
-      <span class="box-hd-title">📋 Prompt</span>
-      <button class="copy-btn" onclick="
-        navigator.clipboard.writeText(document.getElementById('prompt-txt').innerText)
-          .then(()=>{this.textContent='✅ Copied!';setTimeout(()=>this.textContent='📋 Copy Prompt',1800)})
-          .catch(()=>{this.textContent='❌ Failed';setTimeout(()=>this.textContent='📋 Copy Prompt',1800)})
-      ">📋 Copy Prompt</button>
-    </div>
-    <pre id="prompt-txt">อ่านไฟล์ `bookmory.db` (Sembast NDJSON format) แล้วสร้าง HTML ชั้นหนังสือสำหรับหนังสือที่อ่านจบในปี 2026 โดยมีเงื่อนไขดังนี้:
-
-**หนังสือที่นับ:**
-- status = DONE
-
-**โทนสีและ Aesthetic:**
-- โทนสีโดยรวมเป็น dark warm wood — พื้นหลังสีน้ำตาลเข้มเกือบดำ
-- ตัวอักษรใช้ฟอนต์ serif สวยงาม (เช่น Playfair Display) สำหรับหัวข้อ และ sans-serif ที่รองรับภาษาไทย (เช่น Sarabun) สำหรับข้อความทั่วไป
-- สีหนังสือแต่ละ series ใช้โทนสีเข้ม rich และ saturated (เช่น burgundy, navy, forest green, amber)
-- accent color ใช้สีทอง #e8c87a สำหรับชื่อ, stats, และ border ของ tooltip
-- tooltip พื้นหลังสีน้ำตาลเข้มแบบ gradient มี border สีทองจางๆ และ drop shadow หนัก
-
-**การแสดงผล:**
-- คิดว่าชั้นละ 600 px มีกี่ชั้นก็ได้ตามความเหมาะสม
-- ความกว้างสันหนังสือ = ความหนา (คิดจาก 200 หน้า = 1 cm) แปลงเป็น px
-- Series เดียวกัน: สีเหมือนกัน + ความสูงเท่ากัน
-- ต่าง series: มีความแตกต่างกัน เช่น เอียงเล็กน้อย หรือความสูงต่างกัน
-- แสดงวันที่อ่านจบเหนือสันหนังสือแต่ละเล่ม (dd MMM) โดยวันที่เปลี่ยนจะ highlight สีทองชัดขึ้น
-
-**Responsive (มือถือ):**
-- ต้องดูได้ดีบนมือถือ ห้าม layout เบี้ยว
-- เพิ่มชั้นได้ แต่ขอชั้นขนาดพอดีจอ
-- ขนาด font, tooltip, และ spacing ต้องปรับให้เหมาะกับหน้าจอเล็ก
-- tooltip บนมือถือให้แสดงตรงกลางหน้าจอแทนการติดขอบ
-
-**Hover / Touch Tooltip:**
-- tooltip ต้องวางที่ระดับ body เป็น position: fixed คำนวณตำแหน่งด้วย JS ห้ามถูก clip โดย parent element
-- รองรับทั้ง mouse (hover) และ touch (tap เพื่อเปิด, tap นอกเพื่อปิด)
-- แสดง: รูปปก · ชื่อหนังสือ · ผู้แต่ง · สำนักพิมพ์ · จำนวนหน้า · ความหนา cm · วันที่อ่านจบ
-- tooltip ต้องไม่ชนขอบหน้าจอ (clamp ทั้ง X และ Y)
-- รูปปกสูง 300px กว้าง tooltip 260px
-
-**Image URL:**
-- แปลง URL รูปปกจาก https://m.media-amazon.com/images/S/ → https://i.gr-assets.com/images/S/ เพื่อให้โหลดได้จริง (Goodreads CDN allow hotlink)
-
-**สำคัญ:** ห้ามใส่ overflow: hidden ใน .shelf-container หรือ .books-row เพราะจะทำให้ tooltip ถูกตัด</pre>
-  </div>
-
-  <!-- รายชื่อหนังสือ -->
-  <div class="divider"></div>
-  <div class="bl-title">📚 รายชื่อหนังสือทั้งหมด</div>
-  <div class="bl-grid" id="bl-grid"></div>
-
 </div>
 
 <script>
-const BOOKS=[{"title": "ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์ เล่ม 3", "authors": ["Priest", "พีต้า", "อินากะ"], "publisher": "Rose", "pages": 328, "thickness": 1.64, "done_date": "01 Jan 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716434536i/213786100.jpg", "series": "ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์"}, {"title": "ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์ เล่ม 4", "authors": ["Priest", "พีต้า", "อินากะ"], "publisher": "Rose", "pages": 368, "thickness": 1.84, "done_date": "02 Jan 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716434567i/213786134.jpg", "series": "ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์"}, {"title": "ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์ เล่ม 5", "authors": ["Priest", "พีต้า", "อินากะ"], "publisher": "Rose", "pages": 444, "thickness": 2.22, "done_date": "06 Jan 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718873569i/215032050.jpg", "series": "ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์"}, {"title": "องค์หญิงชาเขียว เล่ม 1", "authors": ["Chun Dao Han"], "publisher": "Arun Publishing", "pages": 420, "thickness": 2.1, "done_date": "14 Jan 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1753416558i/239076967.jpg", "series": "องค์หญิงชาเขียว"}, {"title": "องค์หญิงชาเขียว เล่ม 2", "authors": ["Chun Dao Han"], "publisher": "Arun Publishing", "pages": 424, "thickness": 2.12, "done_date": "14 Jan 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1753405311i/239077009.jpg", "series": "องค์หญิงชาเขียว"}, {"title": "องค์หญิงชาเขียว เล่ม 3 (จบ)", "authors": ["Chun Dao Han"], "publisher": "Arun Publishing", "pages": 400, "thickness": 2.0, "done_date": "14 Jan 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1754270060i/239077020.jpg", "series": "องค์หญิงชาเขียว"}, {"title": "ซินเดอเรลลา No.1 Bloodhound ตอน ปฐมบทแห่งหมาล่าเนื้อ", "authors": ["BiscuitBus"], "publisher": "อรุณ", "pages": 406, "thickness": 2.03, "done_date": "24 Jan 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470734686i/31379922.jpg", "series": "ซินเดอเรลลา"}, {"title": "ซินเดอเรลลา No.2 Hunting The Lion ตอน ตามล่าราชสีห์", "authors": ["BiscuitBus"], "publisher": "อรุณ", "pages": 544, "thickness": 2.72, "done_date": "24 Jan 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470734777i/31379929.jpg", "series": "ซินเดอเรลลา"}, {"title": "ซินเดอเรลลา No.3 Sagittarius ตอน แผนพิฆาตราชสีห์", "authors": ["BiscuitBus"], "publisher": "อรุณ", "pages": 569, "thickness": 2.85, "done_date": "24 Jan 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470735518i/31380073.jpg", "series": "ซินเดอเรลลา"}, {"title": "กุ้ยเฟยขี้นินทา เล่ม 1", "authors": ["Hua Ri Fei"], "publisher": "hongsamut.com", "pages": 448, "thickness": 2.24, "done_date": "28 Jan 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1679658851i/123726724.jpg", "series": "กุ้ยเฟยขี้นินทา"}, {"title": "กุ้ยเฟยขี้นินทา เล่ม 2", "authors": ["Hua Ri Fei"], "publisher": "hongsamut.com", "pages": 450, "thickness": 2.25, "done_date": "28 Jan 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681310132i/129100186.jpg", "series": "กุ้ยเฟยขี้นินทา"}, {"title": "กุ้ยเฟยขี้นินทา เล่ม 3", "authors": ["Hua Ri Fei"], "publisher": "hongsamut.com", "pages": 444, "thickness": 2.22, "done_date": "29 Jan 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1682007018i/137015077.jpg", "series": "กุ้ยเฟยขี้นินทา"}, {"title": "ฮันเตอร์อยากใช้ชีวิตอย่างสงบ เล่ม4", "authors": ["แพ็กซัม"], "publisher": "Caihong Novels", "pages": 315, "thickness": 1.57, "done_date": "31 Jan 2026", "image": "", "series": "ฮันเตอร์อยากใช้ชีวิตอย่างสงบ"}, {"title": "ตื่นมารับภารกิจพิชิตหัวใจคุณสามี เล่ม 1", "authors": ["Lu Ye Qian He"], "publisher": "EverY", "pages": 328, "thickness": 1.64, "done_date": "01 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1759461231i/242337942.jpg", "series": "ตื่นมารับภารกิจ"}, {"title": "เสน่ห์ปลายจ(ก)วัก", "authors": ["กิ่งฉัตร"], "publisher": "ลูกองุ่น", "pages": 432, "thickness": 2.16, "done_date": "04 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1761015221i/243001361.jpg", "series": "เสน่ห์ปลายจ(ก)วัก"}, {"title": "ข้าก็เป็นสตรีเช่นนี้ เล่ม 1", "authors": ["Yue Xia Die Ying"], "publisher": "อรุณ", "pages": 486, "thickness": 2.43, "done_date": "06 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543854883i/43088099.jpg", "series": "ข้าก็เป็นสตรีเช่นนี้"}, {"title": "ข้าก็เป็นสตรีเช่นนี้ เล่ม 3", "authors": ["Yue Xia Die Ying"], "publisher": "อรุณ", "pages": 474, "thickness": 2.37, "done_date": "06 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543855940i/43088163.jpg", "series": "ข้าก็เป็นสตรีเช่นนี้"}, {"title": "ข้าก็เป็นสตรีเช่นนี้ เล่ม 2", "authors": ["Yue Xia Die Ying"], "publisher": "อรุณ", "pages": 490, "thickness": 2.45, "done_date": "07 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543855277i/43088140.jpg", "series": "ข้าก็เป็นสตรีเช่นนี้"}, {"title": "ผลาญ เล่ม 1", "authors": ["Qian Shan Cha Ke"], "publisher": "hongsamut.com", "pages": 511, "thickness": 2.56, "done_date": "08 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447682181i/27839989.jpg", "series": "ผลาญ"}, {"title": "ผลาญ เล่ม 2", "authors": ["Qian Shan Cha Ke"], "publisher": "ห้องสมุดดอตคอม", "pages": 513, "thickness": 2.56, "done_date": "08 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450161327i/28207896.jpg", "series": "ผลาญ"}, {"title": "ผลาญ เล่ม 3", "authors": ["Qian Shan Cha Ke"], "publisher": "ห้องสมุดดอตคอม", "pages": 502, "thickness": 2.51, "done_date": "08 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1452780293i/28549741.jpg", "series": "ผลาญ"}, {"title": "ผลาญ เล่ม 4", "authors": ["Qian Shan Cha Ke"], "publisher": "ห้องสมุดดอตคอม", "pages": 487, "thickness": 2.44, "done_date": "08 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456771640i/29367701.jpg", "series": "ผลาญ"}, {"title": "ผลาญ เล่ม 5", "authors": ["Qian Shan Cha Ke"], "publisher": "ห้องสมุดดอตคอม", "pages": 493, "thickness": 2.46, "done_date": "08 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459945758i/29813177.jpg", "series": "ผลาญ"}, {"title": "ตื่นมารับภารกิจพิชิตหัวใจคุณสามี เล่ม 2", "authors": ["Lu Ye Qian He"], "publisher": "EverY", "pages": 328, "thickness": 1.64, "done_date": "08 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1760515134i/242773598.jpg", "series": "ตื่นมารับภารกิจ"}, {"title": "ตื่นมารับภารกิจพิชิตหัวใจคุณสามี เล่ม 3 (จบ)", "authors": ["Lu Ye Qian He"], "publisher": "EverY", "pages": 323, "thickness": 1.61, "done_date": "09 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1760515292i/242773651.jpg", "series": "ตื่นมารับภารกิจ"}, {"title": "ฉันกลายเป็นภรรยาที่ถูกหย่า เล่ม 1", "authors": ["Xue Ye"], "publisher": "ห้องสมุดดอตคอม", "pages": 352, "thickness": 1.76, "done_date": "11 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644304457i/60371280.jpg", "series": "ฉันกลายเป็นภรรยาที่ถูกหย่า"}, {"title": "ฉันกลายเป็นภรรยาที่ถูกหย่า เล่ม 2", "authors": ["Xue Ye"], "publisher": "hongsamut.com", "pages": 360, "thickness": 1.8, "done_date": "11 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644329516i/60373346.jpg", "series": "ฉันกลายเป็นภรรยาที่ถูกหย่า"}, {"title": "ฉันกลายเป็นภรรยาที่ถูกหย่า เล่ม 3", "authors": ["Xue Ye"], "publisher": "hongsamut.com", "pages": 360, "thickness": 1.8, "done_date": "11 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644329769i/60373396.jpg", "series": "ฉันกลายเป็นภรรยาที่ถูกหย่า"}, {"title": "ฉันกลายเป็นภรรยาที่ถูกหย่า เล่ม 4", "authors": ["Xue Ye"], "publisher": "", "pages": 354, "thickness": 1.77, "done_date": "11 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644330144i/60373441.jpg", "series": "ฉันกลายเป็นภรรยาที่ถูกหย่า"}, {"title": "หมอยาเจ้าเสน่ห์ เล่ม 1 ตอน 1-190", "authors": ["萧七爷"], "publisher": "หอหมื่นอักษร", "pages": 847, "thickness": 4.24, "done_date": "14 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604886443i/55859625.jpg", "series": "หมอยาเจ้าเสน่ห์"}, {"title": "เกิดใหม่เหมือนเดิม เพิ่มเติมคือฉันจะ(ไม่)จีบนายอีกรอบ ! เล่ม 1", "authors": ["就酱"], "publisher": "Lavender", "pages": 524, "thickness": 2.62, "done_date": "15 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608596530i/56375467.jpg", "series": "เกิดใหม่เหมือนเดิม"}, {"title": "เกิดใหม่เหมือนเดิม เพิ่มเติมคือฉันจะ(ไม่)จีบนายอีกรอบ ! เล่ม 2", "authors": ["就酱"], "publisher": "Lavender", "pages": 529, "thickness": 2.65, "done_date": "15 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608596890i/56375499.jpg", "series": "เกิดใหม่เหมือนเดิม"}, {"title": "เกิดใหม่เหมือนเดิม เพิ่มเติมคือฉันจะ(ไม่)จีบนายอีกรอบ ! เล่ม ...", "authors": ["就酱"], "publisher": "Lavender", "pages": 542, "thickness": 2.71, "done_date": "15 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621527462i/58104988.jpg", "series": "เกิดใหม่เหมือนเดิม"}, {"title": "ผมไม่เป็น (โอเมก้า) ของคุณหรอก! เล่ม 1", "authors": ["สามหนึ่งสองหนึ่ง"], "publisher": "Rose", "pages": 317, "thickness": 1.58, "done_date": "16 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638795569i/59763079.jpg", "series": "ผมไม่เป็น (โอเมก้า)"}, {"title": "ผมไม่เป็น (โอเมก้า) ของคุณหรอก! เล่ม 2", "authors": ["สามหนึ่งสองหนึ่ง"], "publisher": "Rose", "pages": 329, "thickness": 1.65, "done_date": "17 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646067180i/59763090.jpg", "series": "ผมไม่เป็น (โอเมก้า)"}, {"title": "ผมไม่เป็น (โอเมก้า) ของคุณหรอก! เล่ม 3", "authors": ["สามหนึ่งสองหนึ่ง"], "publisher": "Rose", "pages": 321, "thickness": 1.6, "done_date": "21 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638796027i/59763108.jpg", "series": "ผมไม่เป็น (โอเมก้า)"}, {"title": "ใต้สมุทรไม่สิ้นแสง 6", "authors": [], "publisher": "", "pages": 361, "thickness": 1.8, "done_date": "23 Feb 2026", "image": "", "series": "ใต้สมุทรไม่สิ้นแสง 6"}, {"title": "ถ้าอยากสบายให้แต่งกับชายขี้โรค เล่ม 2", "authors": ["Wu Duo Mo Gu"], "publisher": "hongsamut.com", "pages": 434, "thickness": 2.17, "done_date": "28 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741234994i/228791742.jpg", "series": "ถ้าอยากสบายให้แต่งกับชายขี้โรค"}, {"title": "ถ้าอยากสบายให้แต่งกับชายขี้โรค เล่ม 1", "authors": ["Wu Duo Mo Gu"], "publisher": "hongsamut.com", "pages": 426, "thickness": 2.13, "done_date": "28 Feb 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741234115i/228791314.jpg", "series": "ถ้าอยากสบายให้แต่งกับชายขี้โรค"}, {"title": "Fanservice Paradox เล่ม 1", "authors": ["Zhichu"], "publisher": "IRISBOOK", "pages": 380, "thickness": 1.9, "done_date": "01 Mar 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668747378i/63345465.jpg", "series": "Fanservice Paradox"}, {"title": "Fanservice Paradox เล่ม 2", "authors": ["Zhichu", "稚楚", "จื้อฉู่", "อัศวินดอกไม้"], "publisher": "IRISBOOK", "pages": 440, "thickness": 2.2, "done_date": "04 Mar 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681309112i/129080585.jpg", "series": "Fanservice Paradox"}, {"title": "Fanservice Paradox เล่ม 3", "authors": ["Zhichu", "稚楚", "จื้อฉู่", "อัศวินดอกไม้"], "publisher": "IRISBOOK", "pages": 436, "thickness": 2.18, "done_date": "06 Mar 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1694357224i/198892992.jpg", "series": "Fanservice Paradox"}, {"title": "Fanservice paradox เล่ม 4", "authors": ["Zhichu", "稚楚", "จื้อฉู่", "อัศวินดอกไม้", "CoffeeFox33"], "publisher": "IRISBOOK", "pages": 429, "thickness": 2.15, "done_date": "08 Mar 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1705300831i/205401108.jpg", "series": "Fanservice Paradox"}, {"title": "Fanservice paradox เล่ม 5", "authors": ["Zhichu", "稚楚", "จื้อฉู่", "อัศวินดอกไม้", "CoffeeFox33"], "publisher": "IRISBOOK", "pages": 270, "thickness": 1.35, "done_date": "08 Mar 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1705301077i/205401181.jpg", "series": "Fanservice Paradox"}, {"title": "ว่าด้วยอาชีพนางสนม เล่ม 1", "authors": ["Yue Xia Die Ying", "月下蝶影", "เยวี่ยซย่าเตี๋ยอิ่ง", "เยว่เซี่ยเตี๋ยอิ่ง", "ซิ่วจิ่น", "ayacinth"], "publisher": "Jamsai", "pages": 542, "thickness": 2.71, "done_date": "10 Mar 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484300875i/28929769.jpg", "series": "ว่าด้วยอาชีพนางสนม"}, {"title": "ว่าด้วยอาชีพนางสนม เล่ม 2", "authors": ["Yue Xia Die Ying", "月下蝶影", "เยวี่ยซย่าเตี๋ยอิ่ง", "ซิ่วจิ่น", "ayacinth", "เยว่เซี่ยเตี๋ยอิ่ง"], "publisher": "Jamsai", "pages": 563, "thickness": 2.81, "done_date": "10 Mar 2026", "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484300865i/28929774.jpg", "series": "ว่าด้วยอาชีพนางสนม"}];
-const SM={"ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์": {"p": {"d": "#4a0f1c", "m": "#8B2335", "l": "#c4455a", "t": "#ffe8ec"}, "h": 144, "tilt": 0, "single": false}, "องค์หญิงชาเขียว": {"p": {"d": "#0a1e3a", "m": "#1a4a7a", "l": "#2e86c1", "t": "#d6eaf8"}, "h": 158, "tilt": 0, "single": false}, "ซินเดอเรลลา": {"p": {"d": "#0a2e18", "m": "#1a5c32", "l": "#27ae60", "t": "#d5f5e3"}, "h": 192, "tilt": 0, "single": false}, "กุ้ยเฟยขี้นินทา": {"p": {"d": "#3a2005", "m": "#7a4a0a", "l": "#c47a1a", "t": "#fdebd0"}, "h": 170, "tilt": 0, "single": false}, "ฮันเตอร์อยากใช้ชีวิตอย่างสงบ": {"p": {"d": "#1e0a2e", "m": "#4a1f5e", "l": "#7d3c98", "t": "#e8daef"}, "h": 120, "tilt": -2.857279099713196, "single": true}, "ตื่นมารับภารกิจ": {"p": {"d": "#051828", "m": "#0d3854", "l": "#1a6898", "t": "#d1e8f5"}, "h": 124, "tilt": 0, "single": false}, "เสน่ห์ปลายจ(ก)วัก": {"p": {"d": "#2e0808", "m": "#5e1515", "l": "#a93226", "t": "#fde8e8"}, "h": 164, "tilt": -3.0317257536007673, "single": true}, "ข้าก็เป็นสตรีเช่นนี้": {"p": {"d": "#051a0e", "m": "#0e3d1e", "l": "#1e7a3c", "t": "#d5f5e3"}, "h": 184, "tilt": 0, "single": false}, "ผลาญ": {"p": {"d": "#200a30", "m": "#4a1f5e", "l": "#8e44ad", "t": "#ede2f5"}, "h": 190, "tilt": 0, "single": false}, "ฉันกลายเป็นภรรยาที่ถูกหย่า": {"p": {"d": "#2a1605", "m": "#5a320a", "l": "#b07820", "t": "#fef3e2"}, "h": 135, "tilt": 0, "single": false}, "หมอยาเจ้าเสน่ห์": {"p": {"d": "#041820", "m": "#0a3a48", "l": "#157a98", "t": "#d0eff7"}, "h": 210, "tilt": 3.918669151258655, "single": true}, "เกิดใหม่เหมือนเดิม": {"p": {"d": "#200505", "m": "#600e0e", "l": "#b03a2e", "t": "#fde8e6"}, "h": 202, "tilt": 0, "single": false}, "ผมไม่เป็น (โอเมก้า)": {"p": {"d": "#051a0a", "m": "#0e3818", "l": "#208040", "t": "#d5f5e3"}, "h": 122, "tilt": 0, "single": false}, "ใต้สมุทรไม่สิ้นแสง 6": {"p": {"d": "#0a1218", "m": "#1c2a38", "l": "#3d5a6e", "t": "#d5d8dc"}, "h": 137, "tilt": -4.29670074259775, "single": true}, "ถ้าอยากสบายให้แต่งกับชายขี้โรค": {"p": {"d": "#1e1002", "m": "#4a2a04", "l": "#a07010", "t": "#fef9e7"}, "h": 163, "tilt": 0, "single": false}, "Fanservice Paradox": {"p": {"d": "#041028", "m": "#0a2548", "l": "#1a5898", "t": "#d6eaf8"}, "h": 149, "tilt": 0, "single": false}, "ว่าด้วยอาชีพนางสนม": {"p": {"d": "#1a0504", "m": "#480d08", "l": "#b02820", "t": "#fde8e7"}, "h": 210, "tilt": 0, "single": false}};
-const PX=18,GAP=7,SHELF=600;
+const BOOKS = [{"key": "1767118538646318", "title": "ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์ เล่ม 3", "author": "Priest, พีต้า", "publisher": "Rose", "pages": 328, "thickness_cm": 1.64, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716434536i/213786100.jpg", "done_ts": 1767258769715, "series": "ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์", "link": "", "done_date": "01 Jan", "done_date_full": "01 Jan 2026"}, {"key": "1767272978567410", "title": "ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์ เล่ม 4", "author": "Priest, พีต้า", "publisher": "Rose", "pages": 368, "thickness_cm": 1.84, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716434567i/213786134.jpg", "done_ts": 1767374112616, "series": "ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์", "link": "", "done_date": "03 Jan", "done_date_full": "03 Jan 2026"}, {"key": "1767621076913668", "title": "ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์ เล่ม 5", "author": "Priest, พีต้า", "publisher": "Rose", "pages": 444, "thickness_cm": 2.22, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718873569i/215032050.jpg", "done_ts": 1767708758238, "series": "ฉานชื่อผิ่น ดาราจักรไร้สมบูรณ์", "link": "", "done_date": "06 Jan", "done_date_full": "06 Jan 2026"}, {"key": "1768406040762763", "title": "องค์หญิงชาเขียว เล่ม 1", "author": "Chun Dao Han", "publisher": "Arun Publishing", "pages": 420, "thickness_cm": 2.1, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1753416558i/239076967.jpg", "done_ts": 1768409983453, "series": "องค์หญิงชาเขียว", "link": "https://www.goodreads.com/book/show/239076967-1?from_search=true&from_srp=DbO7y55a9O&qid=1", "done_date": "14 Jan", "done_date_full": "14 Jan 2026"}, {"key": "1768410014157542", "title": "องค์หญิงชาเขียว เล่ม 2", "author": "Chun Dao Han", "publisher": "Arun Publishing", "pages": 424, "thickness_cm": 2.12, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1753405311i/239077009.jpg", "done_ts": 1768417101416, "series": "องค์หญิงชาเขียว", "link": "https://www.goodreads.com/book/show/239077009-2?from_search=true&from_srp=E9ihYqkQ9q&qid=2", "done_date": "15 Jan", "done_date_full": "15 Jan 2026"}, {"key": "1768417110726722", "title": "องค์หญิงชาเขียว เล่ม 3 (จบ)", "author": "Chun Dao Han", "publisher": "Arun Publishing", "pages": 400, "thickness_cm": 2.0, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1754270060i/239077020.jpg", "done_ts": 1768423890488, "series": "องค์หญิงชาเขียว", "link": "https://www.goodreads.com/book/show/239077020-3?from_search=true&from_srp=E9ihYqkQ9q&qid=3", "done_date": "15 Jan", "done_date_full": "15 Jan 2026"}, {"key": "1769250110295099", "title": "ซินเดอเรลลา No.1 Bloodhound ตอน ปฐมบทแห่งหมาล่าเนื้อ", "author": "BiscuitBus", "publisher": "อรุณ", "pages": 406, "thickness_cm": 2.03, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470734686i/31379922.jpg", "done_ts": 1769250123025, "series": "ซินเดอเรลลา", "link": "", "done_date": "24 Jan", "done_date_full": "24 Jan 2026"}, {"key": "1769250171342286", "title": "ซินเดอเรลลา No.2 Hunting The Lion ตอน ตามล่าราชสีห์", "author": "BiscuitBus", "publisher": "อรุณ", "pages": 544, "thickness_cm": 2.72, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470734777i/31379929.jpg", "done_ts": 1769265566385, "series": "ซินเดอเรลลา", "link": "", "done_date": "24 Jan", "done_date_full": "24 Jan 2026"}, {"key": "1769266289439602", "title": "ซินเดอเรลลา No.3 Sagittarius ตอน แผนพิฆาตราชสีห์", "author": "BiscuitBus", "publisher": "อรุณ", "pages": 569, "thickness_cm": 2.85, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470735518i/31380073.jpg", "done_ts": 1769279604208, "series": "ซินเดอเรลลา", "link": "", "done_date": "25 Jan", "done_date_full": "25 Jan 2026"}, {"key": "1769612055132730", "title": "กุ้ยเฟยขี้นินทา เล่ม 1", "author": "Hua Ri Fei", "publisher": "hongsamut.com", "pages": 448, "thickness_cm": 2.24, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1679658851i/123726724.jpg", "done_ts": 1769613495888, "series": "กุ้ยเฟยขี้นินทา", "link": "https://www.goodreads.com/book/show/123726724-1?from_search=true&from_srp=fvSQckDPgO&qid=1", "done_date": "28 Jan", "done_date_full": "28 Jan 2026"}, {"key": "1769613515586683", "title": "กุ้ยเฟยขี้นินทา เล่ม 2", "author": "Hua Ri Fei", "publisher": "hongsamut.com", "pages": 450, "thickness_cm": 2.25, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681310132i/129100186.jpg", "done_ts": 1769619011158, "series": "กุ้ยเฟยขี้นินทา", "link": "https://www.goodreads.com/book/show/129100186-2?from_search=true&from_srp=YXwQXfv0VB&qid=4", "done_date": "28 Jan", "done_date_full": "28 Jan 2026"}, {"key": "1769684817577134", "title": "กุ้ยเฟยขี้นินทา เล่ม 3", "author": "Hua Ri Fei", "publisher": "hongsamut.com", "pages": 444, "thickness_cm": 2.22, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1682007018i/137015077.jpg", "done_ts": 1769684833811, "series": "กุ้ยเฟยขี้นินทา", "link": "https://www.goodreads.com/book/show/137015077-3?from_search=true&from_srp=k4MbsdpD1i&qid=2", "done_date": "29 Jan", "done_date_full": "29 Jan 2026"}, {"key": "1769879625371176", "title": "ฮันเตอร์อยากใช้ชีวิตอย่างสงบ เล่ม4", "author": "แพ็กซัม", "publisher": "Caihong Novels", "pages": 315, "thickness_cm": 1.57, "cover": "", "done_ts": 1769885236804, "series": "ฮันเตอร์อยากใช้ชีวิตอย่างสงบ", "link": "", "done_date": "01 Feb", "done_date_full": "01 Feb 2026"}, {"key": "1769972474507607", "title": "ตื่นมารับภารกิจพิชิตหัวใจคุณสามี เล่ม 1", "author": "Lu Ye Qian He", "publisher": "EverY", "pages": 328, "thickness_cm": 1.64, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1759461231i/242337942.jpg", "done_ts": 1769972489176, "series": "ตื่นมารับภารกิจพิชิตหัวใจคุณสามี", "link": "https://www.goodreads.com/book/show/242337942-1?from_search=true&from_srp=AYStYAmWvf&qid=1", "done_date": "02 Feb", "done_date_full": "02 Feb 2026"}, {"key": "1770232741269554", "title": "เสน่ห์ปลายจ(ก)วัก", "author": "กิ่งฉัตร", "publisher": "ลูกองุ่น", "pages": 432, "thickness_cm": 2.16, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1761015221i/243001361.jpg", "done_ts": 1770232760857, "series": "", "link": "https://www.goodreads.com/book/show/243001361?from_search=true&from_srp=wBMVoEaWfd&qid=1", "done_date": "05 Feb", "done_date_full": "05 Feb 2026"}, {"key": "1770304377151863", "title": "ข้าก็เป็นสตรีเช่นนี้ เล่ม 1", "author": "Yue Xia Die Ying", "publisher": "อรุณ", "pages": 486, "thickness_cm": 2.43, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543854883i/43088099.jpg", "done_ts": 1770362100000, "series": "ข้าก็เป็นสตรีเช่นนี้", "link": "https://www.goodreads.com/book/show/43088099-1?from_search=true&from_srp=30ejgjeuoj&qid=1", "done_date": "06 Feb", "done_date_full": "06 Feb 2026"}, {"key": "1770448552183879", "title": "ข้าก็เป็นสตรีเช่นนี้ เล่ม 3", "author": "Yue Xia Die Ying", "publisher": "อรุณ", "pages": 474, "thickness_cm": 2.37, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543855940i/43088163.jpg", "done_ts": 1770362160000, "series": "ข้าก็เป็นสตรีเช่นนี้", "link": "https://www.goodreads.com/book/show/43088163-3?from_search=true&from_srp=g55m52zqYr&qid=2", "done_date": "06 Feb", "done_date_full": "06 Feb 2026"}, {"key": "1770448558484888", "title": "ข้าก็เป็นสตรีเช่นนี้ เล่ม 2", "author": "Yue Xia Die Ying", "publisher": "อรุณ", "pages": 490, "thickness_cm": 2.45, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543855277i/43088140.jpg", "done_ts": 1770448580784, "series": "ข้าก็เป็นสตรีเช่นนี้", "link": "https://www.goodreads.com/book/show/43088140-2?from_search=true&from_srp=g55m52zqYr&qid=3", "done_date": "07 Feb", "done_date_full": "07 Feb 2026"}, {"key": "1770448658956416", "title": "ผลาญ เล่ม 1", "author": "Qian Shan Cha Ke", "publisher": "hongsamut.com", "pages": 511, "thickness_cm": 2.56, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447682181i/27839989.jpg", "done_ts": 1770530568132, "series": "ผลาญ", "link": "https://www.goodreads.com/book/show/27839989-1?from_search=true&from_srp=uRiDcvrgvv&qid=3", "done_date": "08 Feb", "done_date_full": "08 Feb 2026"}, {"key": "1770448685453067", "title": "ผลาญ เล่ม 2", "author": "Qian Shan Cha Ke", "publisher": "ห้องสมุดดอตคอม", "pages": 513, "thickness_cm": 2.56, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450161327i/28207896.jpg", "done_ts": 1770530582656, "series": "ผลาญ", "link": "https://www.goodreads.com/book/show/28207896-2?from_search=true&from_srp=uRiDcvrgvv&qid=1", "done_date": "08 Feb", "done_date_full": "08 Feb 2026"}, {"key": "1770448691520882", "title": "ผลาญ เล่ม 3", "author": "Qian Shan Cha Ke", "publisher": "ห้องสมุดดอตคอม", "pages": 502, "thickness_cm": 2.51, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1452780293i/28549741.jpg", "done_ts": 1770530598346, "series": "ผลาญ", "link": "https://www.goodreads.com/book/show/28549741-3?from_search=true&from_srp=uRiDcvrgvv&qid=2", "done_date": "08 Feb", "done_date_full": "08 Feb 2026"}, {"key": "1770448704583357", "title": "ผลาญ เล่ม 4", "author": "Qian Shan Cha Ke", "publisher": "ห้องสมุดดอตคอม", "pages": 487, "thickness_cm": 2.44, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456771640i/29367701.jpg", "done_ts": 1770530612562, "series": "ผลาญ", "link": "https://www.goodreads.com/book/show/29367701-4?from_search=true&from_srp=uRiDcvrgvv&qid=5", "done_date": "08 Feb", "done_date_full": "08 Feb 2026"}, {"key": "1770448697593758", "title": "ผลาญ เล่ม 5", "author": "Qian Shan Cha Ke", "publisher": "ห้องสมุดดอตคอม", "pages": 493, "thickness_cm": 2.46, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459945758i/29813177.jpg", "done_ts": 1770530626360, "series": "ผลาญ", "link": "https://www.goodreads.com/book/show/29813177-5?from_search=true&from_srp=uRiDcvrgvv&qid=4", "done_date": "08 Feb", "done_date_full": "08 Feb 2026"}, {"key": "1770569243304229", "title": "ตื่นมารับภารกิจพิชิตหัวใจคุณสามี เล่ม 2", "author": "Lu Ye Qian He", "publisher": "EverY", "pages": 328, "thickness_cm": 1.64, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1760515134i/242773598.jpg", "done_ts": 1770576406840, "series": "ตื่นมารับภารกิจพิชิตหัวใจคุณสามี", "link": "https://www.goodreads.com/book/show/242773598-2?from_search=true&from_srp=bBp9cmwFef&qid=2", "done_date": "09 Feb", "done_date_full": "09 Feb 2026"}, {"key": "1770569292001315", "title": "ตื่นมารับภารกิจพิชิตหัวใจคุณสามี เล่ม 3 (จบ)", "author": "Lu Ye Qian He", "publisher": "EverY", "pages": 323, "thickness_cm": 1.61, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1760515292i/242773651.jpg", "done_ts": 1770644163671, "series": "ตื่นมารับภารกิจพิชิตหัวใจคุณสามี", "link": "https://www.goodreads.com/book/show/242773651-3?from_search=true&from_srp=bBp9cmwFef&qid=3", "done_date": "09 Feb", "done_date_full": "09 Feb 2026"}, {"key": "1770839166666692", "title": "ฉันกลายเป็นภรรยาที่ถูกหย่า เล่ม 1", "author": "Xue Ye", "publisher": "ห้องสมุดดอตคอม", "pages": 352, "thickness_cm": 1.76, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644304457i/60371280.jpg", "done_ts": 1770839210244, "series": "ฉันกลายเป็นภรรยาที่ถูกหย่า", "link": "https://www.goodreads.com/book/show/60371280-1?from_search=true&from_srp=GooE1Gg0pK&qid=1", "done_date": "12 Feb", "done_date_full": "12 Feb 2026"}, {"key": "1770839173791143", "title": "ฉันกลายเป็นภรรยาที่ถูกหย่า เล่ม 2", "author": "Xue Ye", "publisher": "hongsamut.com", "pages": 360, "thickness_cm": 1.8, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644329516i/60373346.jpg", "done_ts": 1770839236906, "series": "ฉันกลายเป็นภรรยาที่ถูกหย่า", "link": "https://www.goodreads.com/book/show/60373346-2?from_search=true&from_srp=GooE1Gg0pK&qid=2", "done_date": "12 Feb", "done_date_full": "12 Feb 2026"}, {"key": "1770839178857377", "title": "ฉันกลายเป็นภรรยาที่ถูกหย่า เล่ม 3", "author": "Xue Ye", "publisher": "hongsamut.com", "pages": 360, "thickness_cm": 1.8, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644329769i/60373396.jpg", "done_ts": 1770839256041, "series": "ฉันกลายเป็นภรรยาที่ถูกหย่า", "link": "https://www.goodreads.com/book/show/60373396-3?from_search=true&from_srp=GooE1Gg0pK&qid=3", "done_date": "12 Feb", "done_date_full": "12 Feb 2026"}, {"key": "1770839183617466", "title": "ฉันกลายเป็นภรรยาที่ถูกหย่า เล่ม 4", "author": "Xue Ye", "publisher": "", "pages": 354, "thickness_cm": 1.77, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644330144i/60373441.jpg", "done_ts": 1770839272194, "series": "ฉันกลายเป็นภรรยาที่ถูกหย่า", "link": "https://www.goodreads.com/book/show/60373441-4?from_search=true&from_srp=GooE1Gg0pK&qid=4", "done_date": "12 Feb", "done_date_full": "12 Feb 2026"}, {"key": "1769685261251113", "title": "หมอยาเจ้าเสน่ห์ เล่ม 1 ตอน 1-190", "author": "萧七爷", "publisher": "หอหมื่นอักษร", "pages": 847, "thickness_cm": 4.24, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604886443i/55859625.jpg", "done_ts": 1771079899402, "series": "หมอยาเจ้าเสน่ห์", "link": "https://www.goodreads.com/book/show/55859625-1-1-190?from_search=true&from_srp=Fr5RsjJEH9&qid=3", "done_date": "14 Feb", "done_date_full": "14 Feb 2026"}, {"key": "1771083986663711", "title": "เกิดใหม่เหมือนเดิม เพิ่มเติมคือฉันจะ(ไม่)จีบนายอีกรอบ ! เล่ม 1", "author": "就酱", "publisher": "Lavender", "pages": 524, "thickness_cm": 2.62, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608596530i/56375467.jpg", "done_ts": 1771140405148, "series": "เกิดใหม่เหมือนเดิม เพิ่มเติมคือฉันจะ(ไม่)จีบนายอีกรอบ !", "link": "https://www.goodreads.com/book/show/56375467-1?from_search=true&from_srp=aTNHV9w19C&qid=2", "done_date": "15 Feb", "done_date_full": "15 Feb 2026"}, {"key": "1771140431620860", "title": "เกิดใหม่เหมือนเดิม เพิ่มเติมคือฉันจะ(ไม่)จีบนายอีกรอบ ! เล่ม 2", "author": "就酱", "publisher": "Lavender", "pages": 529, "thickness_cm": 2.65, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608596890i/56375499.jpg", "done_ts": 1771146613136, "series": "เกิดใหม่เหมือนเดิม เพิ่มเติมคือฉันจะ(ไม่)จีบนายอีกรอบ !", "link": "https://www.goodreads.com/book/show/56375499-2?from_search=true&from_srp=fEQt642rA4&qid=2", "done_date": "15 Feb", "done_date_full": "15 Feb 2026"}, {"key": "1771140716899980", "title": "เกิดใหม่เหมือนเดิม เพิ่มเติมคือฉันจะ(ไม่)จีบนายอีกรอบ ! เล่ม ...", "author": "就酱", "publisher": "Lavender", "pages": 542, "thickness_cm": 2.71, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621527462i/58104988.jpg", "done_ts": 1771177693645, "series": "", "link": "https://www.goodreads.com/book/show/58104988-3?from_search=true&from_srp=fEQt642rA4&qid=3", "done_date": "16 Feb", "done_date_full": "16 Feb 2026"}, {"key": "1771256225992044", "title": "ผมไม่เป็น (โอเมก้า) ของคุณหรอก! เล่ม 1", "author": "สามหนึ่งสองหนึ่ง", "publisher": "Rose", "pages": 317, "thickness_cm": 1.58, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638795569i/59763079.jpg", "done_ts": 1771261893340, "series": "ผมไม่เป็น (โอเมก้า) ของคุณหรอก!", "link": "https://www.goodreads.com/book/show/59763079-1?from_search=true&from_srp=Hgi6pPnWRk&qid=2", "done_date": "17 Feb", "done_date_full": "17 Feb 2026"}, {"key": "1771357040896805", "title": "ผมไม่เป็น (โอเมก้า) ของคุณหรอก! เล่ม 2", "author": "สามหนึ่งสองหนึ่ง", "publisher": "Rose", "pages": 329, "thickness_cm": 1.65, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646067180i/59763090.jpg", "done_ts": 1771357055509, "series": "ผมไม่เป็น (โอเมก้า) ของคุณหรอก!", "link": "https://www.goodreads.com/book/show/59763090-2?from_search=true&from_srp=MFNkPpJQA1&qid=1", "done_date": "18 Feb", "done_date_full": "18 Feb 2026"}, {"key": "1771633526743575", "title": "ผมไม่เป็น (โอเมก้า) ของคุณหรอก! เล่ม 3", "author": "สามหนึ่งสองหนึ่ง", "publisher": "Rose", "pages": 321, "thickness_cm": 1.6, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638796027i/59763108.jpg", "done_ts": 1771633552679, "series": "ผมไม่เป็น (โอเมก้า) ของคุณหรอก!", "link": "https://www.goodreads.com/book/show/59763108-3?from_search=true&from_srp=YklxULraKi&qid=3", "done_date": "21 Feb", "done_date_full": "21 Feb 2026"}, {"key": "1771852867621659", "title": "ใต้สมุทรไม่สิ้นแสง 6", "author": "", "publisher": "", "pages": 361, "thickness_cm": 1.8, "cover": "", "done_ts": 1771852890901, "series": "", "link": "", "done_date": "23 Feb", "done_date_full": "23 Feb 2026"}, {"key": "1772263764914856", "title": "ถ้าอยากสบายให้แต่งกับชายขี้โรค เล่ม 2", "author": "Wu Duo Mo Gu", "publisher": "hongsamut.com", "pages": 434, "thickness_cm": 2.17, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741234994i/228791742.jpg", "done_ts": 1772263780457, "series": "ถ้าอยากสบายให้แต่งกับชายขี้โรค", "link": "https://www.goodreads.com/book/show/228791742-2?from_search=true&from_srp=QKHgXKbDzf&qid=2", "done_date": "28 Feb", "done_date_full": "28 Feb 2026"}, {"key": "1772263760863605", "title": "ถ้าอยากสบายให้แต่งกับชายขี้โรค เล่ม 1", "author": "Wu Duo Mo Gu", "publisher": "hongsamut.com", "pages": 426, "thickness_cm": 2.13, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741234115i/228791314.jpg", "done_ts": 1772263799927, "series": "ถ้าอยากสบายให้แต่งกับชายขี้โรค", "link": "https://www.goodreads.com/book/show/228791314-1?from_search=true&from_srp=QKHgXKbDzf&qid=1", "done_date": "28 Feb", "done_date_full": "28 Feb 2026"}, {"key": "1772380078166936", "title": "Fanservice Paradox เล่ม 1", "author": "Zhichu", "publisher": "IRISBOOK", "pages": 380, "thickness_cm": 1.9, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668747378i/63345465.jpg", "done_ts": 1772380112662, "series": "Fanservice Paradox", "link": "https://www.goodreads.com/book/show/63345465-fanservice-paradox-1?from_search=true&from_srp=OoW98C5yB5&qid=4", "done_date": "01 Mar", "done_date_full": "01 Mar 2026"}, {"key": "1772640410300088", "title": "Fanservice Paradox เล่ม 2", "author": "Zhichu, 稚楚", "publisher": "IRISBOOK", "pages": 440, "thickness_cm": 2.2, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681309112i/129080585.jpg", "done_ts": 1772640430519, "series": "Fanservice Paradox", "link": "https://www.goodreads.com/book/show/129080585-fanservice-paradox-2?from_search=true&from_srp=MoWgrQ78Rt&qid=3", "done_date": "04 Mar", "done_date_full": "04 Mar 2026"}, {"key": "1772640442715561", "title": "Fanservice Paradox เล่ม 3", "author": "Zhichu, 稚楚", "publisher": "IRISBOOK", "pages": 436, "thickness_cm": 2.18, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1694357224i/198892992.jpg", "done_ts": 1772821525972, "series": "Fanservice Paradox", "link": "https://www.goodreads.com/book/show/198892992-fanservice-paradox-3?from_search=true&from_srp=MoWgrQ78Rt&qid=5", "done_date": "07 Mar", "done_date_full": "07 Mar 2026"}, {"key": "1772821552304619", "title": "Fanservice paradox เล่ม 4", "author": "Zhichu, 稚楚", "publisher": "IRISBOOK", "pages": 429, "thickness_cm": 2.15, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1705300831i/205401108.jpg", "done_ts": 1772979111987, "series": "Fanservice paradox", "link": "https://www.goodreads.com/book/show/205401108-fanservice-paradox-4?from_search=true&from_srp=kWZ4nPZLg4&qid=6", "done_date": "08 Mar", "done_date_full": "08 Mar 2026"}, {"key": "1772821557030667", "title": "Fanservice paradox เล่ม 5", "author": "Zhichu, 稚楚", "publisher": "IRISBOOK", "pages": 270, "thickness_cm": 1.35, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1705301077i/205401181.jpg", "done_ts": 1772992877439, "series": "Fanservice paradox", "link": "https://www.goodreads.com/book/show/205401181-fanservice-paradox-5?from_search=true&from_srp=kWZ4nPZLg4&qid=5", "done_date": "09 Mar", "done_date_full": "09 Mar 2026"}, {"key": "1773129626546474", "title": "ว่าด้วยอาชีพนางสนม เล่ม 1", "author": "Yue Xia Die Ying, 月下蝶影", "publisher": "Jamsai", "pages": 542, "thickness_cm": 2.71, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484300875i/28929769.jpg", "done_ts": 1773129653996, "series": "ว่าด้วยอาชีพนางสนม", "link": "https://www.goodreads.com/book/show/28929769-1?from_search=true&from_srp=CoYyXNdaCA&qid=1", "done_date": "10 Mar", "done_date_full": "10 Mar 2026"}, {"key": "1773129633590044", "title": "ว่าด้วยอาชีพนางสนม เล่ม 2", "author": "Yue Xia Die Ying, 月下蝶影", "publisher": "Jamsai", "pages": 563, "thickness_cm": 2.81, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484300865i/28929774.jpg", "done_ts": 1773129667368, "series": "ว่าด้วยอาชีพนางสนม", "link": "https://www.goodreads.com/book/show/28929774-2?from_search=true&from_srp=CoYyXNdaCA&qid=2", "done_date": "10 Mar", "done_date_full": "10 Mar 2026"}, {"key": "1773138119109276", "title": "สามีผมกำลังจะตาย เล่ม 1", "author": "Bu Hui Xia Qi, 不会下棋", "publisher": "Caihong Novels", "pages": 369, "thickness_cm": 1.84, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1662637905i/62333632.jpg", "done_ts": 1773156822382, "series": "สามีผมกำลังจะตาย", "link": "https://www.goodreads.com/book/show/62333632-1?from_search=true&from_srp=nkNfW3t3rU&qid=1", "done_date": "10 Mar", "done_date_full": "10 Mar 2026"}, {"key": "1773157114557264", "title": "สามีผมกำลังจะตาย เล่ม 2", "author": "Bu Hui Xia Qi, 不会下棋", "publisher": "Caihong Novels", "pages": 385, "thickness_cm": 1.93, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1662638026i/62333648.jpg", "done_ts": 1773164975452, "series": "สามีผมกำลังจะตาย", "link": "https://www.goodreads.com/book/show/62333648-2?from_search=true&from_srp=3u5NokbuqE&qid=4", "done_date": "11 Mar", "done_date_full": "11 Mar 2026"}, {"key": "1773157123174360", "title": "สามีผมกำลังจะตาย เล่ม 3", "author": "Bu Hui Xia Qi, 不会下棋", "publisher": "Caihong Novels", "pages": 417, "thickness_cm": 2.08, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666177797i/63038612.jpg", "done_ts": 1773173978255, "series": "สามีผมกำลังจะตาย", "link": "https://www.goodreads.com/book/show/63038612-3?from_search=true&from_srp=3u5NokbuqE&qid=2", "done_date": "11 Mar", "done_date_full": "11 Mar 2026"}, {"key": "1773336918144482", "title": "ชายาผู้มีคุณธรรม 1", "author": "Yue Xia Die Ying, 月下蝶影", "publisher": "อรุณ", "pages": 472, "thickness_cm": 2.36, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1491029862i/34702192.jpg", "done_ts": 1773250500000, "series": "", "link": "https://www.goodreads.com/book/show/34702192-1?from_search=true&from_srp=JeUvgxMBO1&qid=1", "done_date": "12 Mar", "done_date_full": "12 Mar 2026"}, {"key": "1773157109913078", "title": "สามีผมกำลังจะตาย เล่ม 4", "author": "Bu Hui Xia Qi, 不会下棋", "publisher": "Caihong Novels", "pages": 417, "thickness_cm": 2.08, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666177834i/63038620.jpg", "done_ts": 1773324300000, "series": "สามีผมกำลังจะตาย", "link": "https://www.goodreads.com/book/show/63038620-4?from_search=true&from_srp=3u5NokbuqE&qid=3", "done_date": "12 Mar", "done_date_full": "12 Mar 2026"}, {"key": "1773336923586056", "title": "ชายาผู้มีคุณธรรม 2", "author": "Yue Xia Die Ying, 月下蝶影", "publisher": "อรุณ", "pages": 464, "thickness_cm": 2.32, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1491029879i/34702202.jpg", "done_ts": 1773336953705, "series": "", "link": "https://www.goodreads.com/book/show/34702202-2?from_search=true&from_srp=JeUvgxMBO1&qid=2", "done_date": "13 Mar", "done_date_full": "13 Mar 2026"}, {"key": "1773592613372454", "title": "การกลับมาขององค์หญิงใหญ่ เล่ม 1", "author": "สถิตกาล", "publisher": "", "pages": 255, "thickness_cm": 1.27, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1766389539i/245627825.jpg", "done_ts": 1773419820000, "series": "การกลับมาขององค์หญิงใหญ่", "link": "https://www.goodreads.com/book/show/245627825-1?from_search=true&from_srp=yMTgQlEbQm&qid=4", "done_date": "13 Mar", "done_date_full": "13 Mar 2026"}, {"key": "1773422475215580", "title": "ท้ากฎไขปริศนามหา'ลัยหลอน เล่ม 1", "author": "Yu  Yu, 榆鱼", "publisher": "Yinyang Publishing", "pages": 488, "thickness_cm": 2.44, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1752633763i/238873193.jpg", "done_ts": 1773486560142, "series": "ท้ากฎไขปริศนามหา'ลัยหลอน", "link": "", "done_date": "14 Mar", "done_date_full": "14 Mar 2026"}, {"key": "1773497183473044", "title": "ท้ากฎไขปริศนามหา'ลัยหลอน เล่ม 2", "author": "Yu  Yu, 榆鱼", "publisher": "Yinyang Publishing", "pages": 496, "thickness_cm": 2.48, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1752634009i/238873284.jpg", "done_ts": 1773510699756, "series": "ท้ากฎไขปริศนามหา'ลัยหลอน", "link": "", "done_date": "15 Mar", "done_date_full": "15 Mar 2026"}, {"key": "1773157118883698", "title": "สามีผมกำลังจะตาย เล่ม special", "author": "Bu Hui Xia Qi, 不会下棋", "publisher": "Caihong Novels", "pages": 113, "thickness_cm": 0.56, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666177865i/63038642.jpg", "done_ts": 1773516180000, "series": "", "link": "https://www.goodreads.com/book/show/63038642-special?from_search=true&from_srp=3u5NokbuqE&qid=5", "done_date": "15 Mar", "done_date_full": "15 Mar 2026"}, {"key": "1773571688191908", "title": "ท้ากฎไขปริศนามหา'ลัยหลอน เล่ม 3", "author": "Yu  Yu, 榆鱼", "publisher": "Yinyang Publishing", "pages": 504, "thickness_cm": 2.52, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1752634369i/238874243.jpg", "done_ts": 1773583733103, "series": "ท้ากฎไขปริศนามหา'ลัยหลอน", "link": "", "done_date": "15 Mar", "done_date_full": "15 Mar 2026"}, {"key": "1774880060452666", "title": "นางพญาท้ารบ 1", "author": "Qian Shan Cha Ke, 千山茶客", "publisher": "ห้องสมุดดอตคอม", "pages": 355, "thickness_cm": 1.77, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522225522i/39668756.jpg", "done_ts": 1774898626337, "series": "", "link": "https://www.goodreads.com/book/show/39668756-1?from_search=true&from_srp=7C4uo48j2c&qid=3", "done_date": "31 Mar", "done_date_full": "31 Mar 2026"}, {"key": "1774880066471930", "title": "นางพญาท้ารบ 2", "author": "Qian Shan Cha Ke, 千山茶客", "publisher": "ห้องสมุด", "pages": 354, "thickness_cm": 1.77, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522225560i/39668758.jpg", "done_ts": 1774898641873, "series": "", "link": "https://www.goodreads.com/book/show/39668758-2?from_search=true&from_srp=7C4uo48j2c&qid=2", "done_date": "31 Mar", "done_date_full": "31 Mar 2026"}, {"key": "1774880073742013", "title": "นางพญาท้ารบ 3", "author": "Qian Shan Cha Ke, 千山茶客", "publisher": "ห้องสมุด", "pages": 340, "thickness_cm": 1.7, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522225591i/39668768.jpg", "done_ts": 1774898663723, "series": "", "link": "https://www.goodreads.com/book/show/39668768-3?from_search=true&from_srp=7C4uo48j2c&qid=5", "done_date": "31 Mar", "done_date_full": "31 Mar 2026"}, {"key": "1774880082460562", "title": "นางพญาท้ารบ 4", "author": "Qian Shan Cha Ke, 千山茶客", "publisher": "ห้องสมุดดอตคอม", "pages": 340, "thickness_cm": 1.7, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522722632i/39668777.jpg", "done_ts": 1774898680920, "series": "", "link": "https://www.goodreads.com/book/show/39668777-4?from_search=true&from_srp=7C4uo48j2c&qid=1", "done_date": "31 Mar", "done_date_full": "31 Mar 2026"}, {"key": "1774898706207731", "title": "นางพญาท้ารบ 6", "author": "Qian Shan Cha Ke, 千山茶客", "publisher": "ห้องสมุดดอตคอม", "pages": 340, "thickness_cm": 1.7, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522812409i/39668801.jpg", "done_ts": 1774898730643, "series": "", "link": "https://www.goodreads.com/book/show/39668801-6?from_search=true&from_srp=exxZ77zZ1C&qid=6", "done_date": "31 Mar", "done_date_full": "31 Mar 2026"}, {"key": "1774898720430280", "title": "นางพญาท้ารบ 5", "author": "Qian Shan Cha Ke, 千山茶客", "publisher": "ห้องสมุดดอตคอม", "pages": 340, "thickness_cm": 1.7, "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522722649i/39668795.jpg", "done_ts": 1774898741490, "series": "", "link": "https://www.goodreads.com/book/show/39668795-5?from_search=true&from_srp=exxZ77zZ1C&qid=3", "done_date": "31 Mar", "done_date_full": "31 Mar 2026"}];
 
-const shelves=[]; let cur=[],cw=0,ps=null;
-BOOKS.forEach(b=>{
-  const w=Math.max(13,Math.round(b.thickness*PX));
-  const gap=(ps&&ps!==b.series)?GAP:0;
-  if(cw+gap+w>SHELF&&cur.length){shelves.push(cur);cur=[];cw=0;}
-  cur.push(b);cw+=gap+w;ps=b.series;
-});
-if(cur.length)shelves.push(cur);
+// ── Color palette per series ──
+const PALETTE = [
+  '#7a1a28','#1a3356','#1e4a2a','#6b3d0a',
+  '#3a1a4a','#0e2640','#4a1010','#1e3d12',
+  '#5c2a0a','#0a2a3a','#3d1a35','#2a3d0a',
+  '#8b2333','#1a3a5c','#1e4a2e','#7a4a0a',
+];
+const seriesColors = {};
+let colorIdx = 0;
+function getSeriesColor(series) {
+  if (!series) return PALETTE[colorIdx++ % PALETTE.length];
+  if (!seriesColors[series]) seriesColors[series] = PALETTE[colorIdx++ % PALETTE.length];
+  return seriesColors[series];
+}
 
-function buildShelf(books,num){
-  const groups=[]; let g=null;
-  books.forEach(b=>{
-    if(g&&g.s===b.series)g.bb.push(b);
-    else{g={s:b.series,bb:[b]};groups.push(g);}
+// ── Series height (same series = same height) ──
+const seriesHeights = {};
+function getSeriesHeight(series, pages) {
+  const base = 130; const max = 220;
+  const h = Math.min(max, Math.round(base + (pages / 600) * (max - base)));
+  if (series) {
+    if (!seriesHeights[series]) seriesHeights[series] = h;
+    return seriesHeights[series];
+  }
+  return h + (Math.random() * 20 - 10 | 0);
+}
+
+// ── Spine width from pages ──
+function getSpineWidth(pages) {
+  const cm = pages / 200;
+  const minW = 18, maxW = 58;
+  return Math.min(maxW, Math.max(minW, Math.round(cm * 28)));
+}
+
+// ── Slight tilt for non-series ──
+function getTilt(series) {
+  if (series) return 0;
+  const tilts = [-1.5, -0.8, 0.5, 1.2, -1.0, 0.7, -0.4, 1.5];
+  return tilts[Math.floor(Math.random() * tilts.length)];
+}
+
+// ── Build shelf ──
+function buildShelves() {
+  const wrapper = document.getElementById('shelf-wrapper');
+  const BOOKS_PER_ROW = window.innerWidth < 600 ? 8 : 15;
+  
+  // Chunk books into rows
+  const rows = [];
+  let row = [];
+  BOOKS.forEach((b, i) => {
+    row.push(b);
+    if (row.length >= BOOKS_PER_ROW) { rows.push(row); row = []; }
   });
-  let html='',lastDate='';
-  groups.forEach((gr,gi)=>{
-    if(gi>0)html+=`<div class="sgap"></div>`;
-    const {p,h,tilt,single}=SM[gr.s];
-    const bg=`background:linear-gradient(to right,${p.d} 0%,${p.m} 22%,${p.l} 50%,${p.m} 78%,${p.d} 100%)`;
-    gr.bb.forEach(book=>{
-      const w=Math.max(13,Math.round(book.thickness*PX));
-      const ts=single&&tilt!==0?`style="transform:rotate(${tilt.toFixed(1)}deg);transform-origin:bottom center;"`:'' ;
-      const idx=BOOKS.indexOf(book);
-      const isNew=book.done_date!==lastDate; if(isNew)lastDate=book.done_date;
-      const dp=book.done_date.split(' ');
-      html+=`<div class="bw">
-        <div class="book" data-idx="${idx}" ${ts}>
-          <div class="spine" style="${bg};width:${w}px;height:${h}px;">
-            <span class="stxt" style="color:${p.t}">${book.title}</span>
-          </div>
-        </div>
-        <div class="dtick${isNew?' nd':''}"></div>
-        <div class="dpin${isNew?' nd':''}">${dp[0]} ${dp[1]}</div>
-      </div>`;
+  if (row.length) rows.push(row);
+
+  wrapper.innerHTML = '';
+  let globalIdx = 0;
+  rows.forEach((rowBooks) => {
+    const shelfRow = document.createElement('div');
+    shelfRow.className = 'shelf-row';
+    
+    // Date label: show first date in this row
+    const firstDate = rowBooks[0].done_date;
+    const lastDatePrevRow = globalIdx > 0 ? BOOKS[globalIdx - 1]?.done_date : null;
+    const isNewDate = firstDate !== lastDatePrevRow;
+    const dateLabel = document.createElement('div');
+    dateLabel.className = 'shelf-date-label' + (isNewDate ? ' new-date' : '');
+    dateLabel.textContent = firstDate;
+    shelfRow.appendChild(dateLabel);
+
+    const plank = document.createElement('div');
+    plank.className = 'shelf-plank';
+    const booksDiv = document.createElement('div');
+    booksDiv.className = 'books-row';
+
+    rowBooks.forEach((b, j) => {
+      const i = globalIdx + j;
+      const spine = document.createElement('div');
+      spine.className = 'book-spine';
+      const color = getSeriesColor(b.series);
+      const h = getSeriesHeight(b.series, b.pages);
+      const w = getSpineWidth(b.pages);
+      const tilt = b.series ? 0 : getTilt(b.series);
+      
+      spine.style.cssText = [
+        'background: linear-gradient(160deg,' + lighten(color,20) + ' 0%,' + color + ' 40%,' + darken(color,15) + ' 100%)',
+        'height:' + h + 'px',
+        'width:' + w + 'px',
+        tilt ? 'transform:rotate('+tilt+'deg)' : '',
+        'box-shadow: 2px 4px 12px rgba(0,0,0,0.6), inset 1px 0 0 rgba(255,255,255,0.08)'
+      ].filter(Boolean).join(';');
+      
+      const lineTop = document.createElement('div');
+      lineTop.className = 'spine-line';
+      const lineBot = document.createElement('div');
+      lineBot.className = 'spine-line';
+      
+      const inner = document.createElement('div');
+      inner.className = 'book-spine-inner';
+      inner.textContent = b.title;
+      
+      spine.appendChild(lineTop);
+      spine.appendChild(inner);
+      spine.appendChild(lineBot);
+      
+      // Events
+      spine.addEventListener('mouseenter', e => showTooltip(e, b));
+      spine.addEventListener('mousemove', e => positionTooltip(e));
+      spine.addEventListener('mouseleave', () => hideTooltip());
+      spine.addEventListener('click', e => { e.stopPropagation(); showTooltip(e, b); });
+      spine.addEventListener('touchstart', e => { e.preventDefault(); showTooltip(e.touches[0], b); }, {passive:false});
+      
+      booksDiv.appendChild(spine);
     });
+    globalIdx += rowBooks.length;
+
+    plank.appendChild(booksDiv);
+    shelfRow.appendChild(plank);
+    wrapper.appendChild(shelfRow);
   });
-  return `<div class="shelf-unit">
-    <div class="shelf-lbl">ชั้นที่ ${num}</div>
-    <div class="shelf-wrap">
-      <div class="shelf-back"><div class="books-row">${html}</div></div>
-      <div class="shelf-plank"></div>
-    </div>
-  </div>`;
 }
-document.getElementById('shelves').innerHTML=shelves.map((s,i)=>buildShelf(s,i+1)).join('');
 
-// Tooltip
-const ttEl=document.getElementById('tt');
-const ttCW=document.getElementById('tt-cw');
-const ttTi=document.getElementById('tt-title');
-const ttMe=document.getElementById('tt-meta');
-const TW=260,MG=12; let AE=null;
-
-function show(el){
-  const b=BOOKS[+el.dataset.idx];
-  ttTi.textContent=b.title;
-  ttCW.innerHTML=b.image
-    ?`<img id="tt-img" src="${b.image}" alt="ปก" onerror="this.outerHTML='<div id=tt-nc>📖</div>'">`
-    :`<div id="tt-nc">📖</div>`;
-  const au=b.authors.length?b.authors.slice(0,2).join(', '):'—';
-  ttMe.innerHTML=`
-    <div class="tt-row"><span class="ic">✍️</span><span><strong>${au}</strong></span></div>
-    <div class="tt-row"><span class="ic">🏢</span><span>${b.publisher||'—'}</span></div>
-    <div class="tt-row"><span class="ic">📄</span><span>${b.pages.toLocaleString()} หน้า · <strong>${b.thickness} cm</strong></span></div>
-    <div class="tt-row"><span class="ic">✅</span><span>อ่านจบ <strong>${b.done_date}</strong></span></div>`;
-  ttEl.classList.add('vis'); place(el);
+// ── Stats ──
+function buildStats() {
+  const totalPages = BOOKS.reduce((s,b) => s + b.pages, 0);
+  const totalThick = (BOOKS.reduce((s,b) => s + b.thickness_cm, 0)).toFixed(1);
+  const seriesSet = new Set(BOOKS.filter(b=>b.series).map(b=>b.series));
+  document.getElementById('stats-row').innerHTML = [
+    [BOOKS.length,'Books Read'],
+    [totalPages.toLocaleString(),'Pages'],
+    [totalThick + ' cm','Total Thickness'],
+    [seriesSet.size,'Series'],
+  ].map(([n,l]) => '<div class="stat-item"><span class="stat-num">'+n+'</span><span class="stat-label">'+l+'</span></div>').join('');
 }
-function hide(){ttEl.classList.remove('vis');AE=null;}
-function place(el){
-  const mob=window.innerWidth<=600;
-  if(mob){ttEl.style.left='50%';ttEl.style.top=Math.max(MG,window.innerHeight*.28)+'px';return;}
-  ttEl.style.left='-9999px';ttEl.style.top='0';
-  const th=ttEl.offsetHeight||460;
-  const r=el.getBoundingClientRect();
-  const vw=window.innerWidth,vh=window.innerHeight;
-  let lx=r.left+r.width/2-TW/2, ty=r.top-th-MG;
-  lx=Math.max(MG,Math.min(lx,vw-TW-MG));
-  if(ty<MG)ty=r.bottom+MG;
-  if(ty+th>vh-MG)ty=vh-th-MG;
-  if(ty<MG)ty=MG;
-  ttEl.style.left=lx+'px';ttEl.style.top=ty+'px';
-}
-document.querySelectorAll('.book').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{AE=el;show(el);});
-  el.addEventListener('mouseleave',()=>hide());
-  el.addEventListener('touchstart',e=>{
-    e.preventDefault();
-    if(AE===el){hide();el.classList.remove('touched');return;}
-    if(AE)AE.classList.remove('touched');
-    AE=el;el.classList.add('touched');show(el);
-  },{passive:false});
-});
-document.addEventListener('touchstart',e=>{
-  if(AE&&!AE.contains(e.target)&&!ttEl.contains(e.target)){AE.classList.remove('touched');hide();}
-});
 
-// Book list
-document.getElementById('bl-grid').innerHTML=BOOKS.map(b=>{
-  const au=b.authors.length?b.authors.slice(0,2).join(' · '):'—';
-  const pub=b.publisher||'—';
-  return `<div class="bl-card">
-    <div class="bl-name">${b.title}</div>
-    <div class="bl-author">✍️ ${au}</div>
-    <div class="bl-pub">🏢 ${pub} &nbsp;·&nbsp; 📄 ${b.pages.toLocaleString()} หน้า</div>
-    <div class="bl-link-slot"><span class="bl-link-empty">+ เพิ่ม link รีวิว</span></div>
-  </div>`;
-}).join('');
+// ── Book List ──
+function buildList() {
+  const listEl = document.getElementById('book-list');
+  listEl.innerHTML = BOOKS.map((b,i) => {
+    const authorText = b.author || '—';
+    const pubText = b.publisher || '—';
+    return '<div class="book-list-item">' +
+      '<div class="book-list-num">' + (i+1) + '</div>' +
+      '<div class="book-list-info">' +
+        '<div class="book-list-title">' + esc(b.title) + '</div>' +
+        '<div class="book-list-meta">' + esc(authorText) + ' · <span class="pub">' + esc(pubText) + '</span></div>' +
+        '<div class="review-link-placeholder">[ review link ]</div>' +
+      '</div>' +
+      '<div class="book-list-date">' + b.done_date + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ── Tooltip ──
+const tip = document.getElementById('tooltip');
+function showTooltip(e, b) {
+  const imgContainer = document.getElementById('tip-img-container');
+  if (b.cover) {
+    imgContainer.innerHTML = '<img class="tip-cover" src="' + esc(b.cover) + '" alt="" onerror="this.parentNode.innerHTML=\'<div class=tip-cover-placeholder>📚</div>\'">';
+  } else {
+    imgContainer.innerHTML = '<div class="tip-cover-placeholder">📚</div>';
+  }
+  document.getElementById('tip-title').textContent = b.title;
+  document.getElementById('tip-author').textContent = b.author || '—';
+  document.getElementById('tip-pub').textContent = b.publisher || '—';
+  document.getElementById('tip-pages').textContent = b.pages + ' pages';
+  document.getElementById('tip-thick').textContent = b.thickness_cm.toFixed(2) + ' cm';
+  document.getElementById('tip-date').textContent = '✓ Finished ' + b.done_date_full;
+  tip.style.display = 'block';
+  positionTooltip(e);
+}
+function positionTooltip(e) {
+  const x = e.clientX ?? e.pageX; const y = e.clientY ?? e.pageY;
+  const tw = tip.offsetWidth || 260; const th = tip.offsetHeight || 360;
+  const vw = window.innerWidth; const vh = window.innerHeight;
+  let left = x + 16;
+  let top = y - 20;
+  if (left + tw > vw - 8) left = x - tw - 16;
+  if (top + th > vh - 8) top = vh - th - 8;
+  if (top < 8) top = 8;
+  if (left < 8) left = 8;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideTooltip() { tip.style.display = 'none'; }
+document.addEventListener('click', hideTooltip);
+document.addEventListener('touchstart', e => { if(!e.target.closest('.book-spine')) hideTooltip(); });
+
+// ── Color helpers ──
+function hexToRgb(h) {
+  const r = parseInt(h.slice(1,3),16), g = parseInt(h.slice(3,5),16), b = parseInt(h.slice(5,7),16);
+  return [r,g,b];
+}
+function rgbToHex(r,g,b) {
+  return '#' + [r,g,b].map(v => Math.min(255,Math.max(0,v)).toString(16).padStart(2,'0')).join('');
+}
+function lighten(hex, amt) {
+  const [r,g,b] = hexToRgb(hex);
+  return rgbToHex(r+amt, g+amt, b+amt);
+}
+function darken(hex, amt) { return lighten(hex, -amt); }
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Init ──
+buildStats();
+buildShelves();
+buildList();
+window.addEventListener('resize', () => buildShelves());
 </script>
 </body>
 </html>
