@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gacha Banner Summary & Simulator - Embers of an Endless Dream</title>
+    <style>
+        :root {
+            --bg-color: #121214;
+            --card-bg: #1e1e24;
+            --surface-0: #121214;
+            --surface-1: #1e1e24;
+            --surface-2: #25252e;
+            --accent-gold: #e5b869;
+            --accent-light-gold: #f3d79b;
+            --fill-accent: #e5b869;
+            --text-main: #e6e6e6;
+            --text-primary: #e6e6e6;
+            --text-sub: #a0a0ab;
+            --text-secondary: #9fa8da;
+            --text-muted: #6c757d;
+            --text-success: #4ade80;
+            --border-color: #33333d;
+            --border: #33333d;
+            --border-accent: rgba(229, 184, 105, 0.4);
+            --border-success: rgba(34, 197, 94, 0.3);
+            --table-header-bg: #2a2a35;
+            --highlight-bg: rgba(229, 184, 105, 0.1);
+            --btn-bg: #2a2a35;
+            --btn-hover: #383846;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 20px; line-height: 1.6; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        
+        header { 
+            text-align: center; 
+            padding: 30px 20px; 
+            background: linear-gradient(180deg, #2a2215 0%, var(--card-bg) 100%); 
+            border-radius: 12px; 
+            border: 1px solid var(--accent-gold); 
+            margin-bottom: 25px; 
+        }
+        h1 { color: var(--accent-gold); font-size: 1.8rem; margin-bottom: 8px; }
+        .subtitle { color: var(--text-sub); font-size: 0.95rem; }
+
+        .section-card { 
+            background-color: var(--card-bg); 
+            border-radius: 12px; 
+            padding: 20px; 
+            margin-bottom: 25px; 
+            border: 1px solid var(--border-color); 
+        }
+        h2, h3 { color: var(--accent-light-gold); font-size: 1.3rem; margin-bottom: 15px; border-bottom: 2px solid var(--accent-gold); padding-bottom: 8px; }
+        
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        th { background-color: var(--table-header-bg); color: var(--accent-gold); font-weight: 600; white-space: nowrap; }
+        tr:hover { background-color: var(--highlight-bg); }
+        
+        .char-name { font-weight: bold; color: var(--accent-light-gold); }
+        .lang-en { color: #9fa8da; font-size: 0.88em; display: block; margin-top: 2px; }
+        .lang-zh { color: var(--text-sub); font-size: 0.82em; display: block; }
+        
+        ul { list-style-type: none; padding-left: 0; }
+        li { position: relative; padding-left: 20px; margin-bottom: 12px; }
+        li::before { content: "✦"; position: absolute; left: 0; color: var(--accent-gold); }
+
+        .stats-summary {
+            background: #25252e;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-gold);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+        .stats-summary strong { color: var(--accent-gold); }
+
+        .percentile-label { font-weight: bold; color: var(--accent-light-gold); }
+        .pulls-val { font-weight: bold; color: var(--accent-gold); font-size: 1rem; }
+        .desc-th { display: block; color: var(--text-main); }
+        .desc-en { display: block; color: var(--text-secondary); font-size: 0.82em; margin-top: 2px; }
+
+        /* GALLERY STYLES */
+        .card-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
+        .card-item { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+        .card-image-box { width: 100%; height: 240px; background: #121214; border: 1px dashed var(--accent-gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; position: relative; }
+        .card-image-box img { width: 100%; height: 100%; object-fit: cover; }
+        .card-placeholder { color: var(--text-muted); font-size: 0.8rem; padding: 10px; display: none; }
+        .card-title-th { font-size: 0.9rem; font-weight: bold; color: var(--accent-light-gold); }
+        .card-title-en { font-size: 0.75rem; color: #9fa8da; }
+
+        /* STRATEGY BOX STYLES */
+        .strategy-box { background-color: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .box-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent-gold); padding-bottom: 10px; margin-bottom: 15px; }
+        .box-title { color: var(--accent-light-gold); font-size: 1.15rem; font-weight: bold; }
+        .btn-copy { background-color: var(--btn-bg); color: var(--accent-gold); border: 1px solid var(--border-accent); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
+        .btn-copy:hover { background-color: var(--btn-hover); transform: translateY(-1px); }
+        .content-body { font-size: 0.9rem; white-space: pre-line; line-height: 1.6; }
+
+        /* SIMULATOR STYLES */
+        .pull-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+        .btn-option { padding: 14px; border: 1px solid var(--border); background: var(--surface-2); border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text-primary); transition: all 0.25s; }
+        .btn-option:hover { background: var(--surface-1); border-color: var(--fill-accent); transform: translateY(-2px); }
+        .btn-option.active { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; border-color: var(--fill-accent); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+        .custom-input-wrapper { display: flex; gap: 8px; margin-bottom: 1rem; }
+        .custom-input-wrapper input { flex: 1; padding: 12px; border: 0.5px solid var(--border); border-radius: 8px; background: var(--surface-2); color: var(--text-primary); font-size: 14px; }
+        .custom-input-wrapper input:focus { outline: none; border-color: var(--fill-accent); }
+        .btn-primary { padding: 14px 24px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 600; width: 100%; transition: all 0.25s; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4); }
+        
+        .results { display: none; }
+        .results.show { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .stat-box { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+        .stat-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-value { font-size: 32px; font-weight: 700; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+        .mini-stat { background: var(--surface-2); border: 0.5px solid var(--border); padding: 1rem; border-radius: 10px; text-align: center; }
+        .mini-stat-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; }
+        .mini-stat-value { font-size: 24px; font-weight: 700; color: var(--text-primary); }
+        
+        /* CHARACTER RESULT WITH IMAGE (RATE-UP ONLY) */
+        .character-item { display: grid; grid-template-columns: 60px 120px 1fr 90px; align-items: center; gap: 12px; padding: 10px 12px; border: 0.5px solid var(--border); font-size: 13px; background: var(--surface-1); border-radius: 10px; margin-bottom: 8px; }
+        /* STANDARD CHARACTER RESULT (NO IMAGE) */
+        .character-item-no-img { display: grid; grid-template-columns: 120px 1fr 90px; align-items: center; gap: 12px; padding: 12px; border: 0.5px solid var(--border); font-size: 13px; background: var(--surface-1); border-radius: 10px; margin-bottom: 8px; }
+        
+        .char-thumb { width: 50px; height: 65px; border-radius: 6px; overflow: hidden; border: 1px solid var(--accent-gold); background: #121214; display: flex; align-items: center; justify-content: center; }
+        .char-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .char-card-name { font-size: 12px; color: var(--text-secondary); }
+        .char-count { background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%); color: var(--accent-light-gold); padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 13px; text-align: center; border: 0.5px solid rgba(99, 102, 241, 0.3); }
+        
+        .bonus-box { background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%); border: 1px solid var(--border-success); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; color: var(--text-success); }
+        .bonus-title { font-weight: 600; margin-bottom: 8px; font-size: 15px; }
+        .bonus-content { font-size: 13px; line-height: 1.8; }
+        .bonus-card-wrapper { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+        
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-right: 6px; }
+        .badge-6star { background: #d4a574; color: #1a1410; }
+        .badge-5star { background: #c084fc; color: #1a0f2e; }
+        .badge-4star { background: #60a5fa; color: #001f3f; }
+        .badge-3star { background: #10b981; color: #001a0f; }
+        
+        .rarity-summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 1rem; }
+        .rarity-item { background: var(--surface-1); padding: 1rem; border-radius: 10px; border: 0.5px solid var(--border); }
+        .rarity-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; }
+        .rarity-value { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+
+        .toast { position: fixed; bottom: 20px; right: 20px; background-color: var(--accent-gold); color: #000; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 1000; }
+        .toast.show { opacity: 1; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>✦ ธุลีล่องรอยฝัน / Embers of an Endless Dream ✦</h1>
+        <p class="subtitle">合欢溯梦 - สรุปตู้กาชาและโปรแกรมจำลองการสุ่ม / Gacha Banner Summary & Interactive Simulator</p>
+    </header>
+
+    <!-- GALLERY SECTION -->
+    <div class="section-card">
+        <h2>📷 การ์ด 6 ดาวลิมิเต็ดประจำตู้ / Limited 6-Star Bonds Gallery</h2>
+        <div class="card-gallery">
+            <div class="card-item">
+                <div class="card-image-box">
+                    <img src="https://github.com/snowdarkz/snowdarkz.github.io/blob/main/osborn.png?raw=true" alt="Osborn" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="card-placeholder">รูปภาพไม่พร้อมใช้งาน<br>(Image Unavailable)</div>
+                </div>
+                <div class="card-title-th">เซียวอี้</div>
+                <div class="card-title-en">ร่วมมือร่วมใจ<br>Bound as One Heart</div>
+            </div>
+            <div class="card-item">
+                <div class="card-image-box">
+                    <img src="https://github.com/snowdarkz/snowdarkz.github.io/blob/main/evan.png?raw=true" alt="Evan" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="card-placeholder">รูปภาพไม่พร้อมใช้งาน<br>(Image Unavailable)</div>
+                </div>
+                <div class="card-title-th">ลู่เฉิน</div>
+                <div class="card-title-en">เพลิงผลาญทุ่ง<br>Crimson Flame Engulfs Plain</div>
+            </div>
+            <div class="card-item">
+                <div class="card-image-box">
+                    <img src="https://github.com/snowdarkz/snowdarkz.github.io/blob/main/Sariel.png?raw=true" alt="Sariel" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="card-placeholder">รูปภาพไม่พร้อมใช้งาน<br>(Image Unavailable)</div>
+                </div>
+                <div class="card-title-th">ฉีซือหลี่</div>
+                <div class="card-title-en">ค่ำคืนที่ไม่อาจพบเจอ<br>Eternal Night's Longing</div>
+            </div>
+            <div class="card-item">
+                <div class="card-image-box">
+                    <img src="https://github.com/snowdarkz/snowdarkz.github.io/blob/main/Charlie.png?raw=true" alt="Charlie" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="card-placeholder">รูปภาพไม่พร้อมใช้งาน<br>(Image Unavailable)</div>
+                </div>
+                <div class="card-title-th">จาหลี่ซู</div>
+                <div class="card-title-en">เก็บกลิ่นหอมในคืนสีรุ้ง<br>Fragrance of Neon Night</div>
+            </div>
+            <div class="card-item">
+                <div class="card-image-box">
+                    <img src="https://github.com/snowdarkz/snowdarkz.github.io/blob/main/Jesse.png?raw=true" alt="Jesse" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="card-placeholder">รูปภาพไม่พร้อมใช้งาน<br>(Image Unavailable)</div>
+                </div>
+                <div class="card-title-th">เซี่ยหมิงซิง</div>
+                <div class="card-title-en">ตื่นจากฝันยามชมสวน<br>A Garden Rendezvous with a Dream</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 1: 6-STAR LIST -->
+    <div class="section-card">
+        <h2>1. สรุปรายชื่อการ์ด 6 ดาว / 6-Star Bonds List</h2>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ตัวละคร<br><span class="lang-en">Character</span></th>
+                        <th>การ์ดเรตอัป 75%<br><span class="lang-en">Rate-Up Limited (75%)</span></th>
+                        <th>การ์ดถาวร 1<br><span class="lang-en">Permanent Bond 1</span></th>
+                        <th>การ์ดถาวร 2<br><span class="lang-en">Permanent Bond 2</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="char-name">เซียวอี้<span class="lang-en">Osborn / Xiao Yi</span><span class="lang-zh">萧逸</span></td>
+                        <td>ร่วมมือร่วมใจ<span class="lang-en">Bound as One Heart</span><span class="lang-zh">束手同心</span></td>
+                        <td>ศึกอันรุ่งโรจน์<span class="lang-en">Resplendent Clash</span><span class="lang-zh">绚烂之战</span></td>
+                        <td>แสงสีอันวุ่นวาย<span class="lang-en">Shattered Prism</span><span class="lang-zh">纷乱虹光</span></td>
+                    </tr>
+                    <tr>
+                        <td class="char-name">ลู่เฉิน<span class="lang-en">Evan / Lu Chen</span><span class="lang-zh">陆沉</span></td>
+                        <td>เพลิงผลาญทุ่ง<span class="lang-en">Crimson Flame Engulfs Plain</span><span class="lang-zh">瑰焰燎原</span></td>
+                        <td>แดนแสงสนธยา<span class="lang-en">Realm of Twilight</span><span class="lang-zh">暮光之境</span></td>
+                        <td>ไออุ่นในพนาสารท<span class="lang-en">Warm Light in Autumn Woods</span><span class="lang-zh">光暖秋林</span></td>
+                    </tr>
+                    <tr>
+                        <td class="char-name">ฉีซือหลี่<span class="lang-en">Sariel / Qi Sili</span><span class="lang-zh">齐司礼</span></td>
+                        <td>ค่ำคืนที่ไม่อาจพบเจอ<span class="lang-en">Eternal Night's Longing</span><span class="lang-zh">长宵无觅</span></td>
+                        <td>มวลไอหมอก<span class="lang-en">Ethereal Mist</span><span class="lang-zh">氤氲</span></td>
+                        <td>เงาสะท้อน<span class="lang-en">Reflection</span><span class="lang-zh">倒影</span></td>
+                    </tr>
+                    <tr>
+                        <td class="char-name">จาหลี่ซู<span class="lang-en">Charlie / Zha Lisu</span><span class="lang-zh">查理苏</span></td>
+                        <td>เก็บกลิ่นหอมในคืนสีรุ้ง<span class="lang-en">Fragrance of Neon Night</span><span class="lang-zh">霓夜采香</span></td>
+                        <td>ผู้เกิดมาพร้อมปีก<span class="lang-en">Born with Wings</span><span class="lang-zh">生และมี翼</span></td>
+                        <td>เกมรักลึกซึ้ง<span class="lang-en">Intimate Game</span><span class="lang-zh">缠绵游戏</span></td>
+                    </tr>
+                    <tr>
+                        <td class="char-name">เซี่ยหมิงซิง<span class="lang-en">Jesse / Xia Mingxing</span><span class="lang-zh">夏鸣星</span></td>
+                        <td>ตื่นจากฝันยามชมสวน<span class="lang-en">A Garden Rendezvous with a Dream</span><span class="lang-zh">游园惊梦</span></td>
+                        <td>ราตรีสุดฟ้าตระการ<span class="lang-en">Radiant Polar Night</span><span class="lang-zh">绚丽极夜</span></td>
+                        <td>ยังคิดคะนึงหา<span class="lang-en">Lingering Affections</span><span class="lang-zh">缱绻心绪</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SECTION 2: PERCENTILE SUMMARY -->
+    <div class="section-card">
+        <h2>2. ตารางสรุปผลการสุ่มตาม Percentile / Pull Percentiles Summary Table</h2>
+        <div style="color: var(--text-sub); font-size: 0.85rem; margin-bottom: 12px; line-height: 1.7;">
+            <p><strong>✦ ฉายาลิมิเต็ด / Limited Titles:</strong> พัฒนาคุณภาพสายสัมพันธ์ซีรีส์นี้จนถึงเฟส 2 (Rank 2) เพื่อรับฉายาเฉพาะตัว: [รักไม่ปล่อยมือ] [ความรักดั่งไฟ] [สรรพสิ่งในแววตา] [สายลับขโมยหัวใจ] [บุปผางามจันทร์กระจ่าง]</p>
+            <p><strong>✦ ไอเทมพิเศษเพิ่มเติม:</strong> สำเร็จแผนงานกิจกรรมรับตั๋วสุ่มเดี่ยวลิมิเต็ด [ความฝันยามเย็น × 26] (Earn up to [Twilight Dream ×26] single-draw tickets via event plan tasks).</p>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ระดับ / Tier</th>
+                        <th>จำนวนตัวละคร / Count</th>
+                        <th>P25</th>
+                        <th>P50 มัธยฐาน (Median)</th>
+                        <th>P75</th>
+                        <th>P90</th>
+                        <th>P95</th>
+                        <th>P99</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>R0 (ใบแรก / 1st Copy)</td><td>1 LI</td><td>20</td><td>44</td><td>63</td><td>70</td><td>83</td><td>100*</td></tr>
+                    <tr><td>R0 (ใบแรก / 1st Copy)</td><td>2 LI</td><td>63</td><td>91</td><td>100*</td><td>142</td><td>171</td><td>200*</td></tr>
+                    <tr><td>R0 (ใบแรก / 1st Copy)</td><td>3 LI</td><td>100*</td><td>124</td><td>168</td><td>200*</td><td>200*</td><td>235</td></tr>
+                    <tr><td>R0 (ใบแรก / 1st Copy)</td><td>4 LI</td><td>161</td><td>200*</td><td>200*</td><td>219</td><td>256</td><td>340</td></tr>
+                    <tr><td>R0 (ใบแรก / 1st Copy)</td><td>5 LI (ครบตู้ / Complete)</td><td>200*</td><td>209</td><td>269</td><td>336</td><td>384</td><td>492</td></tr>
+                    <tr><td>R1 (สำเนาแรก / 2nd Copy)</td><td>1 LI</td><td>100</td><td>105</td><td>145</td><td>195</td><td>200*</td><td>230</td></tr>
+                    <tr><td>R1 (สำเนาแรก / 2nd Copy)</td><td>2 LI</td><td>135</td><td>180</td><td>200*</td><td>235</td><td>295</td><td>340</td></tr>
+                    <tr><td>R1 (สำเนาแรก / 2nd Copy)</td><td>3 LI</td><td>200*</td><td>235</td><td>295</td><td>340</td><td>415</td><td>470</td></tr>
+                    <tr><td>R1 (สำเนาแรก / 2nd Copy)</td><td>4 LI</td><td>270</td><td>335</td><td>415</td><td>470</td><td>570</td><td>640</td></tr>
+                    <tr><td>R1 (สำเนาแรก / 2nd Copy)</td><td>5 LI (ครบตู้ / Complete)</td><td>385</td><td>470</td><td>570</td><td>640</td><td>795</td><td>900</td></tr>
+                    <tr><td>R2 (สำเนาสอง / 3rd Copy)</td><td>1 LI</td><td>160</td><td>200*</td><td>205</td><td>260</td><td>325</td><td>370</td></tr>
+                    <tr><td>R2 (สำเนาสอง / 3rd Copy)</td><td>2 LI</td><td>205</td><td>260</td><td>325</td><td>370</td><td>450</td><td>505</td></tr>
+                    <tr><td>R2 (สำเนาสอง / 3rd Copy)</td><td>3 LI</td><td>300</td><td>370</td><td>450</td><td>505</td><td>590</td><td>655</td></tr>
+                    <tr><td>R2 (สำเนาสอง / 3rd Copy)</td><td>4 LI</td><td>410</td><td>495</td><td>590</td><td>655</td><td>770</td><td>855</td></tr>
+                    <tr><td>R2 (สำเนาสอง / 3rd Copy)</td><td>5 LI (ครบตู้ / Complete)</td><td>550</td><td>655</td><td>770</td><td>855</td><td>1,035</td><td>1,170</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SECTION 3: PULL PERCENTILES FOR SINGLE 6-STAR -->
+    <div class="section-card">
+        <h2>3. Percentile จำนวนสุ่มต่อการได้ 6 ดาว 1 ใบ / Pull Percentiles for One 6★</h2>
+        <div class="stats-summary">
+            📌 <strong>ค่าเฉลี่ยสถิติ (Mean):</strong> 6 ดาวเฉยๆ ~35 สุ่ม | 6 ดาวหน้าตู้ ~46 สุ่ม<br>
+            📌 <strong>ค่ามัธยฐาน (Median):</strong> 6 ดาวเฉยๆ 35 สุ่ม | 6 ดาวหน้าตู้ 44 สุ่ม
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Percentile</th>
+                        <th>6 ดาวเฉยๆ (Any 6★)<br><span class="desc-en">Base 2% + Soft Pity</span></th>
+                        <th>6 ดาวหน้าตู้ (Rate-Up 6★)<br><span class="desc-en">Rate-Up 75% Share</span></th>
+                        <th>คำอธิบาย / Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="percentile-label">10th Percentile</td>
+                        <td><span class="pulls-val">5 สุ่ม</span> (Pulls)</td>
+                        <td><span class="pulls-val">7 สุ่ม</span> (Pulls)</td>
+                        <td><span class="desc-th">ดวงดีระดับ Top 10% (ออกไวมาก)</span><span class="desc-en">Top 10% extremely lucky players</span></td>
+                    </tr>
+                    <tr>
+                        <td class="percentile-label">25th Percentile</td>
+                        <td><span class="pulls-val">14 สุ่ม</span> (Pulls)</td>
+                        <td><span class="pulls-val">20 สุ่ม</span> (Pulls)</td>
+                        <td><span class="desc-th">ดวงดีกว่าค่าเฉลี่ยทั่วไป</span><span class="desc-en">Luckier than average pulls</span></td>
+                    </tr>
+                    <tr>
+                        <td class="percentile-label">50th Percentile (Median)</td>
+                        <td><span class="pulls-val">35 สุ่ม</span> (Pulls)</td>
+                        <td><span class="pulls-val">44 สุ่ม</span> (Pulls)</td>
+                        <td><span class="desc-th">จุดกึ่งกลางของผู้เล่นทั่วไป (มัธยฐาน)</span><span class="desc-en">Median luck for average players</span></td>
+                    </tr>
+                    <tr>
+                        <td class="percentile-label">75th Percentile</td>
+                        <td><span class="pulls-val">61 สุ่ม</span> (Pulls)</td>
+                        <td><span class="pulls-val">63 สุ่ม</span> (Pulls)</td>
+                        <td><span class="desc-th">เริ่มเข้าสู่ช่วง Soft Pity</span><span class="desc-en">Enters Soft Pity threshold</span></td>
+                    </tr>
+                    <tr>
+                        <td class="percentile-label">90th Percentile</td>
+                        <td><span class="pulls-val">63 สุ่ม</span> (Pulls)</td>
+                        <td><span class="pulls-val">70 สุ่ม</span> (Pulls)</td>
+                        <td><span class="desc-th">ชนช่วง Soft Pity (ค่อนข้างเกลือ/หลุดเรต)</span><span class="desc-en">Reaches Soft Pity zone or lost 75/25</span></td>
+                    </tr>
+                    <tr>
+                        <td class="percentile-label">99th Percentile</td>
+                        <td><span class="pulls-val">67 สุ่ม</span> (Pulls)</td>
+                        <td><span class="pulls-val">100 สุ่ม</span> (Pulls)*</td>
+                        <td><span class="desc-th">เกือบชนการันตี / ดวงกุดสุ่มหลุดเรต</span><span class="desc-en">Near hard pity / Extremely unlucky (*Includes 100-pull bonus)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SECTION 4: RULES & PITY -->
+    <div class="section-card">
+        <h2>4. กติกาและระบบการันตี / Rules & Pity System</h2>
+        <ul>
+            <li>
+                <strong>ระยะเวลากิจกรรม / Event Period:</strong><br>
+                4 สิงหาคม 2026 (05:00) – 14 สิงหาคม 2026 (04:59) [GMT+7]
+                <span class="lang-en">August 4, 2026 (05:00) – August 14, 2026 (04:59) [GMT+7]</span>
+            </li>
+            <li>
+                <strong>อัตราสุ่มพื้นฐาน / Base Rates:</strong><br>
+                6★ = 2% (เรตอัป 75%), 5★ = 10%, 4★ = 30%, 3★ = 58%
+                <span class="lang-en">6★ = 2% (75% Rate-up share), 5★ = 10%, 4★ = 30%, 3★ = 58%</span>
+            </li>
+            <li>
+                <strong>ระบบ Soft Pity (การันตี 70 สุ่ม / 70-Pull Hard Pity):</strong><br>
+                หากสุ่มไม่ได้ 6★ ติดต่อกัน 60 ครั้ง สุ่มที่ 61 เป็นต้นไป อัตราจะเพิ่มสุ่มละ +10% (สุ่มที่ 70 โอกาสเท่ากับ 100%)
+                <span class="lang-en">If no 6★ is pulled in 60 continuous draws, rate increases by +10% per draw starting from 61st draw up to 100% at 70th draw.</span>
+            </li>
+            <li>
+                <strong>ร้านค้าแลกการ์ด / Exchange Shop (Long Dream Letters):</strong><br>
+                1 สุ่ม = 1 แต้ม | ใช้ 140 แต้ม แลกการ์ดลิมิเต็ดได้ 1 ใบ (จำกัดตัวละครละ 2 ครั้ง)
+                <span class="lang-en">1 Draw = 1 Token | Exchange 140 tokens for 1 Limited Bond (Limit 2 per character).</span>
+            </li>
+            <li>
+                <strong>โบนัสยอดสุ่มสะสม / Milestone Rewards:</strong><br>
+                • ครบ 100 สุ่ม: รับฟรีการ์ด 6★ ลิมิเต็ดแบบสุ่ม 1 ใบ<br>
+                • ครบ 200 สุ่ม: รับฟรีกล่องเลือกการ์ด 6★ ลิมิเต็ด 1 ใบ
+                <span class="lang-en">• 100 Draws: Free Random Limited 6★ Bond x1<br>• 200 Draws: Free Selectable Limited 6★ Box x1</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- STRATEGY BOXES -->
+    <div class="strategy-box">
+        <div class="box-header">
+            <div class="box-title">🇹🇭 สรุปกลยุทธ์การสุ่ม (ภาษาไทย)</div>
+            <button class="btn-copy" onclick="copyText('content-th')">📋 Copy ข้อความ</button>
+        </div>
+        <div class="content-body" id="content-th">📌 สรุปกลยุทธ์การสุ่มตู้กาชา "ธุลีล่องรอยฝัน"
+
+1. สายเน้นเมนคนเดียว (ต้องการแค่ 1 ใบ - R0)
+✦ เป้าหมาย: สุ่มเอาการ์ด 6★ ลิมิเต็ดของตัวละครที่ชอบ 1 ใบ
+✦ กลยุทธ์: เตรียมดาวหมีเล็กไว้อย่างน้อย 44 – 70 สุ่ม (ค่ามัธยฐาน P50 อยู่ที่ประมาณ 44 สุ่ม)
+✦ หากกดได้การ์ดที่ต้องการก่อนถึง 140 สุ่ม ให้หยุดสุ่มทันที ไม่จำเป็นต้องดันต่อ
+
+2. สายทำฉายาลิมิเต็ด (ต้องการการ์ดซ้ำ 2 ใบ - R1 / ปลดล็อกเฟส 2)
+✦ เป้าหมาย: ปลดล็อกเฟส 2 ของการ์ดเพื่อรับฉายาสุดพิเศษ
+✦ กลยุทธ์ (ทางเลือกที่คุ้มที่สุด): สุ่มให้ได้การ์ดเมนจากตู้ 1 ใบ แล้วหยุดสุ่ม จากนั้นนำ 140 แต้ม (จดหมายฝันนิรันดร์) ไปกดแลกการ์ดใบเดิมซ้ำในร้านค้า (การันตี 100% ที่ 140 สุ่ม)
+✦ กรณีสุ่มหลุดเรต: หากใช้ดาวหมีเล็กกดถึง 200 สุ่ม คุณจะได้ทั้ง แต้มแลก 140 แต้ม (แลกใบที่ 1) และ กล่องเลือกการ์ดลิมิเต็ด 200 สุ่ม (เลือกใบที่ 2) การันตีได้ฉายาแน่นอน 100%
+
+3. สายเก็บครบตู้ 5 คน (R0 - 5 LI)
+✦ เป้าหมาย: สุ่มเก็บการ์ด 6★ ลิมิเต็ดให้ครบทั้ง 5 ตัวละคร
+✦ จุดคุ้มทุนสูงสุด: ดันยอดสุ่มด้วยดาวหมีเล็กไปให้ถึง 200 สุ่ม
+✦ การบริหารตัวช่วย: เมื่อสุ่มถึง 200 ครั้ง คุณจะได้โบนัสรวม 3 ทาง คือ (1) โบนัส 100 สุ่ม: ได้การ์ดลิมิเต็ดสุ่มฟรี 1 ใบ, (2) โบนัส 200 สุ่ม: ได้กล่องเลือกการ์ดลิมิเต็ดฟรี 1 ใบ, และ (3) ร้านค้า 140 แต้ม: แลกการ์ดลิมิเต็ดเลือกเองได้อีก 1 ใบ
+✦ สรุป: กล่องเลือก 200 สุ่มจะช่วยปิดจุดอ่อนเรื่อง "สุ่มได้ตัวเดิมซ้ำจนขาดตัวสุดท้าย" ทำให้ค่าเฉลี่ยการเก็บครบตู้ลดลงมาเหลือเพียงประมาณ 200 – 210 สุ่ม เท่านั้น
+
+📌 สรุปจำนวนสุ่ม/ดาวหมีเล็กที่แนะนำในการวางแผน (P50 Median Thresholds)
+✦ 44 สุ่ม: เหมาะสำหรับสายลุ้นใบแรก (R0 - 1 LI)
+✦ 140 สุ่ม: จุดการันตีฉายาลิมิเต็ด (R1) แบบเซฟงบที่สุด
+✦ 200 สุ่ม: จุดคุ้มค่าที่สุดสำหรับสายเก็บครบตู้ 5 คน หรือการันตีฉายา 100% แม้จะดวงกุดที่สุด</div>
+    </div>
+
+    <div class="strategy-box">
+        <div class="box-header">
+            <div class="box-title">🇬🇧 Gacha Strategy (English)</div>
+            <button class="btn-copy" onclick="copyText('content-en')">📋 Copy Text</button>
+        </div>
+        <div class="content-body" id="content-en">📌 Embers of an Endless Dream Gacha Strategy Summary
+
+1. Single Character Focus (1st Copy - R0)
+✦ Target: Obtain 1 copy of your preferred limited 6★ Bond.
+✦ Strategy: Prepare Little Bear Stars for at least 44 – 70 pulls (P50 Median is around 44 pulls).
+✦ If you get your target card before 140 pulls, stop immediately. No need to pull further.
+
+2. Limited Title Focus (2 Copies - R1 / Phase 2)
+✦ Target: Unlock Phase 2 to claim the exclusive Limited Title.
+✦ Strategy (Most Efficient Route): Pull 1 copy from the banner, then stop. Use 140 Long Dream Letters to exchange for the 2nd copy in the shop (100% Guaranteed at 140 Pulls).
+✦ Off-Banner Contingency: If you reach 200 pulls using Little Bear Stars, you will get both 140 Shop Tokens (Exchange 1st copy) and the 200-Pull Choice Box (Select 2nd copy), guaranteeing the title 100%.
+
+3. Full Collection Focus (All 5 Characters)
+✦ Target: Collect all 5 limited 6★ Bonds.
+✦ Sweet Spot: Push your pulls using Little Bear Stars to 200 pulls.
+✦ Milestone Synergies: Reaching 200 pulls yields 3 major bonuses: (1) 100-Pull Bonus: 1 Free Random Limited Bond, (2) 200-Pull Bonus: 1 Free Selectable Limited Box, and (3) 140 Token Shop: Exchange 1 Chosen Limited Bond.
+✦ Summary: The 200-pull choice box solves the duplicate issue for the final card, lowering the complete collection median down to just 200 – 210 pulls.
+
+📌 Recommended Pull / Little Bear Star Thresholds (P50 Median)
+✦ 44 Pulls: Ideal for aiming for the 1st copy (R0 - 1 LI).
+✦ 140 Pulls: Safest & most cost-effective milestone for the Limited Title (R1).
+✦ 200 Pulls: Best value milestone for full 5-card collection or 100% title guarantee even with worst luck.</div>
+    </div>
+
+    <!-- SECTION 5: INTERACTIVE SIMULATOR -->
+    <div class="section-card">
+        <h2>5. ตัวจำลองการสุ่มกาชา / Interactive Gacha Simulator</h2>
+        <p style="color: var(--text-sub); font-size: 0.88rem; margin-bottom: 15px;">
+            เลือกหรือระบุจำนวนสุ่มเพื่อทดลองจำลองผลลัพธ์ / Select or enter pulls to test simulation:
+        </p>
+
+        <div class="pull-options">
+            <button class="btn-option" onclick="selectPulls(30)">30 Pulls</button>
+            <button class="btn-option" onclick="selectPulls(100)">100 Pulls</button>
+            <button class="btn-option" onclick="selectPulls(140)">140 Pulls</button>
+            <button class="btn-option" onclick="selectPulls(200)">200 Pulls</button>
+        </div>
+        
+        <div class="custom-input-wrapper">
+            <input type="number" id="customPulls" placeholder="ระบุจำนวนสุ่มเอง / Custom Pulls (1-10000)" min="1" max="10000">
+            <button class="btn-option" onclick="selectCustomPulls()" style="flex: 0 0 auto; width: 60px;">✓</button>
+        </div>
+
+        <button class="btn-primary" onclick="simulate()">🎲 ทำการสุ่มกาชา / Simulate Pulls</button>
+
+        <div class="results" id="results" style="margin-top: 20px;">
+            <h3>📊 ผลลัพธ์การสุ่ม / Simulation Results</h3>
+            
+            <div class="stat-row">
+                <div class="mini-stat">
+                    <div class="mini-stat-label">จำนวน Pulls ที่ใช้ / Total Pulls</div>
+                    <div class="mini-stat-value" id="totalPulls">-</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-label">ได้ 6 ดาว / Total 6★</div>
+                    <div class="mini-stat-value" id="sixStarCount">-</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-label">ไม่ใช่ 6 ดาว / Non 6★</div>
+                    <div class="mini-stat-value" id="otherCount">-</div>
+                </div>
+            </div>
+
+            <div id="bonusBoxes"></div>
+
+            <div class="stat-box">
+                <div class="stat-label">📌 การ์ดหน้าตู้ / Rate-Up 6★ (75%)</div>
+                <div class="stat-value" id="onBannerCount">0</div>
+                <div class="detailed-results" id="onBannerDetails"></div>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat-label">🌙 การ์ดหลุดสเปก / Standard 6★ (25%)</div>
+                <div class="stat-value" id="offBannerCount">0</div>
+                <div class="detailed-results" id="offBannerDetails"></div>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat-label">📊 สรุปตามระดับดาว / Rarity Summary</div>
+                <div class="rarity-summary">
+                    <div class="rarity-item">
+                        <div class="rarity-label"><span class="badge badge-5star">5⭐</span></div>
+                        <div class="rarity-value" id="fiveStarCount">0</div>
+                    </div>
+                    <div class="rarity-item">
+                        <div class="rarity-label"><span class="badge badge-4star">4⭐</span></div>
+                        <div class="rarity-value" id="fourStarCount">0</div>
+                    </div>
+                    <div class="rarity-item">
+                        <div class="rarity-label"><span class="badge badge-3star">3⭐</span></div>
+                        <div class="rarity-value" id="threeStarCount">0</div>
+                    </div>
+                    <div class="rarity-item">
+                        <div class="rarity-label">แต้มแลก / Tokens</div>
+                        <div class="rarity-value" id="bookmarkCount">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="toast" id="toast">คัดลอกข้อความเรียบร้อย! / Copied to clipboard!</div>
+
+<script>
+let currentPulls = 0;
+
+const bannerCharacters = [
+  { name: 'เซียวอี้ (Osborn)', card: 'ร่วมมือร่วมใจ (Bound as One Heart)', img: 'https://github.com/snowdarkz/snowdarkz.github.io/blob/main/osborn.png?raw=true' },
+  { name: 'ลู่เฉิน (Evan)', card: 'เพลิงผลาญทุ่ง (Crimson Flame Engulfs Plain)', img: 'https://github.com/snowdarkz/snowdarkz.github.io/blob/main/evan.png?raw=true' },
+  { name: 'ฉีซือหลี่ (Sariel)', card: 'ค่ำคืนที่ไม่อาจพบเจอ (Eternal Night\'s Longing)', img: 'https://github.com/snowdarkz/snowdarkz.github.io/blob/main/Sariel.png?raw=true' },
+  { name: 'จาหลี่ซู (Charlie)', card: 'เก็บกลิ่นหอมในคืนสีรุ้ง (Fragrance of Neon Night)', img: 'https://github.com/snowdarkz/snowdarkz.github.io/blob/main/Charlie.png?raw=true' },
+  { name: 'เซี่ยหมิงซิง (Jesse)', card: 'ตื่นจากฝันยามชมสวน (A Garden Rendezvous with a Dream)', img: 'https://github.com/snowdarkz/snowdarkz.github.io/blob/main/Jesse.png?raw=true' }
+];
+
+const offBannerCharacters = [
+  { name: 'เซียวอี้ (Osborn)', card: 'ศึกอันรุ่งโรจน์ (Resplendent Clash)' },
+  { name: 'เซียวอี้ (Osborn)', card: 'แสงสีอันวุ่นวาย (Shattered Prism)' },
+  { name: 'ลู่เฉิน (Evan)', card: 'แดนแสงสนธยา (Realm of Twilight)' },
+  { name: 'ลู่เฉิน (Evan)', card: 'ไออุ่นในพนาสารท (Warm Light in Autumn Woods)' },
+  { name: 'ฉีซือหลี่ (Sariel)', card: 'มวลไอหมอก (Ethereal Mist)' },
+  { name: 'ฉีซือหลี่ (Sariel)', card: 'เงาสะท้อน (Reflection)' },
+  { name: 'จาหลี่ซู (Charlie)', card: 'ผู้เกิดมาพร้อมปีก (Born with Wings)' },
+  { name: 'จาหลี่ซู (Charlie)', card: 'เกมรักลึกซึ้ง (Intimate Game)' },
+  { name: 'เซี่ยหมิงซิง (Jesse)', card: 'ราตรีสุดฟ้าตระการ (Radiant Polar Night)' },
+  { name: 'เซี่ยหมิงซิง (Jesse)', card: 'ยังคิดคะนึงหา (Lingering Affections)' }
+];
+
+function copyText(elementId) {
+    const textToCopy = document.getElementById(elementId).innerText;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        showToast();
+    }).catch(err => {
+        alert('Failed to copy: ' + err);
+    });
+}
+
+function showToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => { toast.classList.remove('show'); }, 2000);
+}
+
+function selectPulls(pulls) {
+  currentPulls = pulls;
+  document.querySelectorAll('.btn-option').forEach(btn => btn.classList.remove('active'));
+  if (event && event.target) {
+      event.target.classList.add('active');
+  }
+  document.getElementById('customPulls').value = '';
+}
+
+function selectCustomPulls() {
+  const custom = parseInt(document.getElementById('customPulls').value);
+  if (custom && custom > 0 && custom <= 10000) {
+    currentPulls = custom;
+    document.querySelectorAll('.btn-option').forEach(btn => btn.classList.remove('active'));
+  } else {
+    alert('กรุณาระบุจำนวน pulls ที่ถูกต้อง (1-10000) / Please enter valid pulls (1-10000)');
+  }
+}
+
+function getGachaProbability(pityCounter) {
+  if (pityCounter <= 60) return 0.02;
+  return Math.min(1.0, 0.02 + (pityCounter - 60) * 0.10);
+}
+
+function simulate() {
+  if (currentPulls <= 0) {
+    alert('กรุณาเลือกจำนวน pulls ก่อน / Please select pulls first');
+    return;
+  }
+
+  let pityCounter = 0;
+  let sixStarCount = 0;
+  let onBannerCount = 0;
+  let offBannerCount = 0;
+  let fiveStarCount = 0;
+  let fourStarCount = 0;
+  let threeStarCount = 0;
+  let bookmarkCount = 0;
+
+  const onBannerDetails = {};
+  const offBannerDetails = {};
+
+  for (let i = 0; i < currentPulls; i++) {
+    pityCounter++;
+    bookmarkCount++;
+    const prob = getGachaProbability(pityCounter);
+    
+    if (Math.random() < prob) {
+      sixStarCount++;
+      pityCounter = 0;
+      
+      if (Math.random() < 0.75) {
+        onBannerCount++;
+        const item = bannerCharacters[Math.floor(Math.random() * bannerCharacters.length)];
+        const key = `${item.name}___${item.card}___${item.img}`;
+        onBannerDetails[key] = (onBannerDetails[key] || 0) + 1;
+      } else {
+        offBannerCount++;
+        const item = offBannerCharacters[Math.floor(Math.random() * offBannerCharacters.length)];
+        const key = `${item.name} - ${item.card}`;
+        offBannerDetails[key] = (offBannerDetails[key] || 0) + 1;
+      }
+    } else {
+      const subRoll = Math.random();
+      if (subRoll < 0.10) {
+        fiveStarCount++;
+      } else if (subRoll < 0.40) {
+        fourStarCount++;
+      } else {
+        threeStarCount++;
+      }
+    }
+  }
+
+  displayResults(
+    currentPulls, sixStarCount, onBannerCount, offBannerCount, 
+    fiveStarCount, fourStarCount, threeStarCount, bookmarkCount, 
+    onBannerDetails, offBannerDetails, 
+    currentPulls >= 100, currentPulls >= 200
+  );
+}
+
+function displayResults(pulls, sixStar, onBanner, offBanner, fiveStar, fourStar, threeStar, bookmark, onBannerDetails, offBannerDetails, bonus100, bonus200) {
+  document.getElementById('results').classList.add('show');
+  document.getElementById('totalPulls').textContent = pulls.toLocaleString();
+  document.getElementById('sixStarCount').textContent = sixStar;
+  document.getElementById('otherCount').textContent = pulls - sixStar;
+  document.getElementById('onBannerCount').textContent = onBanner;
+  document.getElementById('offBannerCount').textContent = offBanner;
+  document.getElementById('fiveStarCount').textContent = fiveStar;
+  document.getElementById('fourStarCount').textContent = fourStar;
+  document.getElementById('threeStarCount').textContent = threeStar;
+  document.getElementById('bookmarkCount').textContent = bookmark;
+
+  let bonusHTML = '';
+  if (bonus100) {
+    const randomChar = bannerCharacters[Math.floor(Math.random() * bannerCharacters.length)];
+    bonusHTML += `
+      <div class="bonus-box">
+        <div class="bonus-title">🎁 โบนัส 100 Pulls / 100 Pulls Milestone Bonus</div>
+        <div class="bonus-content">
+          ได้รับ <span class="badge badge-6star">6⭐ ลิมิเต็ด</span> สุ่มแบบฟรี / Received 1 Free Random Limited 6★ Bond:
+          <div class="bonus-card-wrapper">
+            <div class="char-thumb">
+              <img src="${randomChar.img}" alt="${randomChar.name}" onerror="this.style.display='none';">
+            </div>
+            <div>
+              <strong>${randomChar.name}</strong><br>
+              <span class="char-card-name">${randomChar.card}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  if (bonus200) {
+    bonusHTML += `
+      <div class="bonus-box">
+        <div class="bonus-title">🎁 โบนัส 200 Pulls / 200 Pulls Milestone Bonus</div>
+        <div class="bonus-content">
+          ได้รับกล่องเลือกตัวละคร 6⭐ ลิมิเต็ด 1 ใบ / Received 1 Selectable Limited 6★ Choice Box<br>
+          <strong>สามารถเลือกได้ 1 คน / Choice of: Osborn, Evan, Sariel, Charlie, Jesse</strong>
+        </div>
+      </div>
+    `;
+  }
+  document.getElementById('bonusBoxes').innerHTML = bonusHTML;
+
+  /* RENDER RATE-UP WITH IMAGE */
+  let onBannerHTML = '';
+  Object.entries(onBannerDetails)
+    .sort((a, b) => b[1] - a[1])
+    .forEach(([key, count]) => {
+      const [name, card, img] = key.split('___');
+      onBannerHTML += `
+        <div class="character-item">
+          <div class="char-thumb">
+            <img src="${img}" alt="${name}" onerror="this.style.display='none';">
+          </div>
+          <span class="char-name">${name}</span>
+          <span class="char-card-name">${card}</span>
+          <span class="char-count">${count} ใบ</span>
+        </div>
+      `;
+    });
+  document.getElementById('onBannerDetails').innerHTML = onBannerHTML || '<p style="color: var(--text-secondary); font-size: 13px; text-align: center; padding: 1rem;">ยังไม่ได้สุ่ม 6 ดาวหน้าตู้ / No Rate-Up 6★ Pulled</p>';
+
+  /* RENDER STANDARD WITHOUT IMAGE */
+  let offBannerHTML = '';
+  Object.entries(offBannerDetails)
+    .sort((a, b) => b[1] - a[1])
+    .forEach(([char, count]) => {
+      offBannerHTML += `
+        <div class="character-item-no-img">
+          <span class="char-name" style="grid-column: span 2;">${char}</span>
+          <span class="char-count">${count} ใบ</span>
+        </div>
+      `;
+    });
+  document.getElementById('offBannerDetails').innerHTML = offBannerHTML || '<p style="color: var(--text-secondary); font-size: 13px; text-align: center; padding: 1rem;">ยังไม่ได้สุ่ม 6 ดาวนอกตู้ / No Standard 6★ Pulled</p>';
+
+  window.scrollTo({ top: document.getElementById('results').offsetTop - 80, behavior: 'smooth' });
+}
+
+document.getElementById('customPulls').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') selectCustomPulls();
+});
+</script>
+
+</body>
+</html>
