@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love and Deepspace - Gacha Ticket Calculator</title>
+    <style>
+        :root {
+            --bg-color: #12131C;
+            --card-bg: #1A1C29;
+            --accent-color: #8A72E6;
+            --accent-hover: #9E89F0;
+            --text-color: #E2E8F0;
+            --text-muted: #94A3B8;
+            --border-color: #2E3248;
+            --success-color: #10B981;
+            --highlight-bg: #232738;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            color: #FFFFFF;
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 2px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px 6px 0 0;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .tab-btn.active {
+            color: #FFFFFF;
+            background-color: var(--card-bg);
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--highlight-bg);
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        select {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--accent-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            outline: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            width: 70px;
+        }
+
+        select:focus {
+            box-shadow: 0 0 0 2px rgba(138, 114, 230, 0.4);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .summary-card {
+            background-color: var(--highlight-bg);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .summary-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+
+        .summary-value.accent {
+            color: var(--accent-hover);
+        }
+
+        .note-box {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background-color: rgba(138, 114, 230, 0.1);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 0 6px 6px 0;
+            font-size: 13px;
+            color: var(--text-color);
+        }
+
+        .ref-link {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .ref-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Price Ticket Calculator</h1>
+        <p class="subtitle">คำนวณแพ็กเกจตั๋วกาชา Love and Deepspace</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('multi5')">Multi 5</button>
+        <button class="tab-btn" onclick="switchTab('myth')">Myth</button>
+        <button class="tab-btn" onclick="switchTab('solo')">Solo</button>
+    </div>
+
+    <!-- Multi 5 Tab -->
+    <div id="multi5" class="tab-content active">
+        <div class="card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pack</th>
+                            <th>Price (THB)</th>
+                            <th>Tickets/Pack</th>
+                            <th>Max Packs</th>
+                            <th>Buy Packs</th>
+                            <th>Total Price</th>
+                            <th>Total Tickets</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-multi5"></tbody>
+                </table>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-label">Total Price</div>
+                    <div class="summary-value accent" id="total-price-multi5">0 ฿</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Total Tickets</div>
+                    <div class="summary-value" id="total-tickets-multi5">0</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Avg Price / Ticket</div>
+                    <div class="summary-value" id="avg-price-multi5">0 ฿</div>
+                </div>
+            </div>
+            <a href="https://www.reddit.com/r/LoveAndDeepspace/comments/1ioneht/quintuple_banner_guide_reupload_number_of_wishes/" target="_blank" class="ref-link">🔗 Reference: Quintuple Banner Guide (Reddit)</a>
+             <img src="https://github.com/snowdarkz/snowdarkz.github.io/blob/main/Screenshot%202026-08-10%20205543.png?raw=true" alt="Gacha Banner Guide" style="max-width: 100%; height: auto; border-radius: 8px;">
+            
+        </div>
+    </div>
+
+    <!-- Myth Tab -->
+    <div id="myth" class="tab-content">
+        <div class="card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pack</th>
+                            <th>Price (THB)</th>
+                            <th>Tickets/Pack</th>
+                            <th>Max Packs</th>
+                            <th>Buy Packs</th>
+                            <th>Total Price</th>
+                            <th>Total Tickets</th>
+                            <th>Price / Ticket</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-myth"></tbody>
+                </table>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-label">Total Price</div>
+                    <div class="summary-value accent" id="total-price-myth">0 ฿</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Total Tickets</div>
+                    <div class="summary-value" id="total-tickets-myth">0</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Avg Price / Ticket</div>
+                    <div class="summary-value" id="avg-price-myth">0 ฿</div>
+                </div>
+            </div>
+            <div class="note-box">
+            <a href="https://www.reddit.com/r/LoveAndDeepspace/comments/1jdwzgc/myth_and_myth_rerun_banner_guide_number_of_pulls/" target="_blank" class="ref-link">🔗 Reference: Myth Banner Guide (Reddit)</a>
+            <img src="https://github.com/snowdarkz/snowdarkz.github.io/blob/main/Screenshot%202026-08-10%20205349.png?raw=true" alt="Gacha Banner Guide" style="max-width: 100%; height: auto; border-radius: 8px;">
+             <a href="https://x.com/SilverwingFiend/status/1996032155756159385/photo/1" target="_blank" class="ref-link">🔗 Reference: myth simulator 
+kelsey 🐦‍⬛
+@SilverwingFiend twitter</a>
+            <img src="https://github.com/snowdarkz/snowdarkz.github.io/blob/main/G7NUqu_akAAodRv.jpg?raw=true" alt="Gacha Banner Guide" style="max-width: 100%; height: auto; border-radius: 8px;"></div>
+        </div>
+    </div>
+
+    <!-- Solo Tab -->
+    <div id="solo" class="tab-content">
+        <div class="card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pack</th>
+                            <th>Price (THB)</th>
+                            <th>Tickets/Pack</th>
+                            <th>Max Packs</th>
+                            <th>Buy Packs</th>
+                            <th>Total Price</th>
+                            <th>Total Tickets</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-solo"></tbody>
+                </table>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-label">Total Price</div>
+                    <div class="summary-value accent" id="total-price-solo">0 ฿</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Total Tickets</div>
+                    <div class="summary-value" id="total-tickets-solo">0</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Avg Price / Ticket</div>
+                    <div class="summary-value" id="avg-price-solo">0 ฿</div>
+                </div>
+            </div>
+
+            <div class="note-box">
+                💡 <strong>Note:</strong> 60 โรลผ่านไป จะได้ตั๋วตอนกด 12 โรล = ตอนถึง 70 โรล ใช้จริง 58 โรล
+ <img src="https://github.com/snowdarkz/snowdarkz.github.io/blob/main/Screenshot%202026-08-10%20205525.png?raw=true" alt="Gacha Banner Guide" style="max-width: 100%; height: auto; border-radius: 8px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const data = {
+        multi5: [
+            { pack: 1, price: 19, tickets: 1, maxPacks: 5, defaultWant: 5 },
+            { pack: 2, price: 29, tickets: 2, maxPacks: 3, defaultWant: 3 },
+            { pack: 3, price: 199, tickets: 6, maxPacks: 5, defaultWant: 5 },
+            { pack: 4, price: 399, tickets: 10, maxPacks: 5, defaultWant: 0 },
+            { pack: 5, price: 499, tickets: 12, maxPacks: 5, defaultWant: 0 },
+            { pack: 6, price: 729, tickets: 16, maxPacks: 3, defaultWant: 0 },
+            { pack: 7, price: 1050, tickets: 20, maxPacks: 10, defaultWant: 0 },
+            { pack: 8, price: 2000, tickets: 40, maxPacks: 1, defaultWant: 0 }
+        ],
+        myth: [
+            { pack: 1, price: 19, tickets: 1, maxPacks: 5, defaultWant: 5 },
+            { pack: 2, price: 29, tickets: 2, maxPacks: 5, defaultWant: 5 },
+            { pack: 3, price: 199, tickets: 6, maxPacks: 5, defaultWant: 5 },
+            { pack: 4, price: 399, tickets: 10, maxPacks: 5, defaultWant: 5 },
+            { pack: 5, price: 499, tickets: 12, maxPacks: 3, defaultWant: 3 },
+            { pack: 6, price: 1050, tickets: 20, maxPacks: 10, defaultWant: 10 },
+            { pack: 7, price: 2000, tickets: 40, maxPacks: 1, defaultWant: 1 }
+        ],
+        solo: [
+            { pack: 1, price: 19, tickets: 1, maxPacks: 3, defaultWant: 3 },
+            { pack: 2, price: 29, tickets: 2, maxPacks: 3, defaultWant: 3 },
+            { pack: 3, price: 199, tickets: 6, maxPacks: 3, defaultWant: 3 },
+            { pack: 4, price: 299, tickets: 10, maxPacks: 2, defaultWant: 2 },
+            { pack: 5, price: 499, tickets: 12, maxPacks: 2, defaultWant: 1 },
+            { pack: 6, price: 1050, tickets: 20, maxPacks: 10, defaultWant: 0 }
+        ]
+    };
+
+    function renderTable(category) {
+        const tbody = document.getElementById(`tbody-${category}`);
+        tbody.innerHTML = '';
+
+        data[category].forEach((item, index) => {
+            const tr = document.createElement('tr');
+            
+            let optionsHtml = '';
+            for (let i = 0; i <= item.maxPacks; i++) {
+                const selected = i === item.defaultWant ? 'selected' : '';
+                optionsHtml += `<option value="${i}" ${selected}>${i}</option>`;
+            }
+
+            const isMyth = category === 'myth';
+            const pricePerTicket = (item.price / item.tickets).toFixed(2);
+
+            tr.innerHTML = `
+                <td><strong>Pack ${item.pack}</strong></td>
+                <td>${item.price.toLocaleString()} ฿</td>
+                <td>${item.tickets}</td>
+                <td>${item.maxPacks}</td>
+                <td>
+                    <select id="select-${category}-${index}" onchange="calculateCategory('${category}')">
+                        ${optionsHtml}
+                    </select>
+                </td>
+                <td id="total-price-${category}-${index}">0 ฿</td>
+                <td id="total-tickets-${category}-${index}">0</td>
+                ${isMyth ? `<td>${pricePerTicket} ฿</td>` : ''}
+            `;
+            tbody.appendChild(tr);
+        });
+
+        calculateCategory(category);
+    }
+
+    function calculateCategory(category) {
+        let grandTotalPrice = 0;
+        let grandTotalTickets = 0;
+
+        data[category].forEach((item, index) => {
+            const selectEl = document.getElementById(`select-${category}-${index}`);
+            const wantPacks = parseInt(selectEl.value, 10);
+
+            const rowTotalPrice = wantPacks * item.price;
+            const rowTotalTickets = wantPacks * item.tickets;
+
+            document.getElementById(`total-price-${category}-${index}`).innerText = `${rowTotalPrice.toLocaleString()} ฿`;
+            document.getElementById(`total-tickets-${category}-${index}`).innerText = rowTotalTickets;
+
+            grandTotalPrice += rowTotalPrice;
+            grandTotalTickets += rowTotalTickets;
+        });
+
+        const avgPrice = grandTotalTickets > 0 ? (grandTotalPrice / grandTotalTickets).toFixed(2) : '0.00';
+
+        document.getElementById(`total-price-${category}`).innerText = `${grandTotalPrice.toLocaleString()} ฿`;
+        document.getElementById(`total-tickets-${category}`).innerText = grandTotalTickets;
+        document.getElementById(`avg-price-${category}`).innerText = `${avgPrice} ฿`;
+    }
+
+    function switchTab(category) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        event.target.classList.add('active');
+        document.getElementById(category).classList.add('active');
+    }
+
+    // Initial render
+    ['multi5', 'myth', 'solo'].forEach(renderTable);
+</script>
+
+</body>
+</html>
