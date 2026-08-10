@@ -1,6 +1,483 @@
-
 <!DOCTYPE html>
 <html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คำนวณแพ็กเกจกาชา (Interactive Calculator)</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e9ecef;
+            --selected-row: #eef9f5;
+        }
+
+        body {
+            font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        header {
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .author-info {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: #e2e8f0;
+            color: #475569;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 10px;
+            font-weight: 600;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        tr.selected-row {
+            background-color: var(--selected-row);
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+
+        .summary-card {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-title {
+            font-size: 12px;
+            color: #cbd5e1;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        .badge-limit {
+            background-color: #fef3c7;
+            color: #d97706;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .badge-perm {
+            background-color: #e0f2fe;
+            color: #0284c7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* Custom Checkbox / Toggle */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .checkbox-container input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #10b981;
+        }
+
+        .btn-action {
+            background: #e2e8f0;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-action:hover { background: #cbd5e1; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <h1>คำนวณแพ็กเกจกาชา (Interactive Calculator)</h1>
+            <div class="author-info">made by @snowdarkzq | เลือกเช็กบ็อกซ์เพื่อคำนวณยอดบวกลบอัตโนมัติ</div>
+            <div class="author-info"><a  target="_blank" href="https://docs.google.com/spreadsheets/d/1MivC66zBIFhotc_1-u93Li1miLaRd6Ob35N-kOIZYK0/edit?usp=sharing">gsheet version</a></div>
+        </div>
+        <div>
+            <button class="btn-action" onclick="selectAll(true)">เลือกทั้งหมด</button>
+            <button class="btn-action" onclick="selectAll(false)">ยกเลิกทั้งหมด</button>
+        </div>
+    </header>
+
+    <!-- Stat Dashboard -->
+    <div class="summary-card">
+        <div class="stat-box">
+            <div class="stat-title">ยอดรวมราคาปกติ</div>
+            <div class="stat-value" id="total-price">0 บาท</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-title">ยอดรวม Web Shop</div>
+            <div class="stat-value" id="total-webshop">0 บาท</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-title">รวม VIP Point / Polaris</div>
+            <div class="stat-value" id="total-vip">0 / 0</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-title">รวมจำนวนสุ่มทั้งหมด</div>
+            <div class="stat-value" id="total-pulls">0 ครั้ง</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-title">เฉลี่ย บาท/สุ่ม</div>
+            <div class="stat-value" id="avg-price-per-pull">0.00 บาท</div>
+        </div>
+    </div>
+
+    <!-- Currency Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('thb')">สกุลเงิน THB (บาท)</button>
+        <button class="tab-btn" onclick="switchTab('usd')">สกุลเงิน USD ($)</button>
+    </div>
+
+    <!-- THB TAB -->
+    <div id="tab-thb" class="tab-content active">
+        <div class="table-responsive">
+            <table id="thb-table">
+                <thead>
+                    <tr>
+                        <th class="text-center">ซื้อ</th>
+                        <th>กลุ่มแพ็กเกจ</th>
+                        <th>ชื่อแพ็กเกจ</th>
+                        <th class="text-right">ราคา (บาท)</th>
+                        <th class="text-right">ราคา web shop</th>
+                        <th class="text-right">VIP point</th>
+                        <th class="text-right">ดาวเหนือที่ใช้</th>
+                        <th class="text-right">สุดคุ้ม (%)</th>
+                        <th class="text-center">จำกัดการซื้อ</th>
+                        <th class="text-right">ตั๋วกระรอก (จำกัด)</th>
+                        <th class="text-right">ตั๋วแดง (ถาวร)</th>
+                        <th class="text-right">รวมสุ่ม (ครั้ง)</th>
+                        <th class="text-right">เฉลี่ย บาท/สุ่ม</th>
+                        <th class="text-center">ประเภท</th>
+                        <th class="text-right">ดาวเหนือแถม</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- JS Populated -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- USD TAB -->
+    <div id="tab-usd" class="tab-content">
+        <div class="table-responsive">
+            <table id="usd-table">
+                <thead>
+                    <tr>
+                        <th class="text-center">Buy</th>
+                        <th>Package Series</th>
+                        <th>Package Name</th>
+                        <th class="text-right">USD ($)</th>
+                        <th class="text-right">VIP Point</th>
+                        <th class="text-right">Polaris Price</th>
+                        <th class="text-right">% Value</th>
+                        <th class="text-center">Purchase Limit</th>
+                        <th class="text-right">Twilight Dream (Limit)</th>
+                        <th class="text-right">Permanent Ticket</th>
+                        <th class="text-right">Sum Ticket</th>
+                        <th class="text-right">Avg USD/Ticket</th>
+                        <th class="text-center">Ticket Type</th>
+                        <th class="text-right">Polaris Gain</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- JS Populated -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+const thbData = [
+    { buy: false, group: "พรีออเดอร์สุดคุ้ม (1 - 4 ส.ค.)", name: "กล่องฝันตระการตา·เหอฮวน", price: 340, webPrice: 311, vip: 680, polarisCost: 0, percent: "360%", limit: "1 ครั้ง", limitTicket: 12, permTicket: 0, sumTicket: 12, avg: 28.33, type: "กระรอก (ไม่ถาวร)", bonus: 0 },
+    { buy: false, group: "พรีออเดอร์สุดคุ้ม (1 - 4 ส.ค.)", name: "กล่องฝันตระการตา·โคมไฟ", price: 490, webPrice: 448, vip: 980, polarisCost: 0, percent: "400%", limit: "1 ครั้ง", limitTicket: 18, permTicket: 0, sumTicket: 18, avg: 27.22, type: "กระรอก (ไม่ถาวร)", bonus: 0 },
+    { buy: false, group: "ของขวัญฝันสีอัสดง ช่วงที่ 1 (1 - 4 ส.ค.)", name: "ของขวัญฝันสีอัสดง·I", price: 30, webPrice: 28, vip: 30, polarisCost: 0, percent: "300%", limit: "2 แพ็ก", limitTicket: 1, permTicket: 0, sumTicket: 1, avg: 30.00, type: "กระรอก (ไม่ถาวร)", bonus: 0 },
+    { buy: false, group: "ของขวัญฝันสีอัสดง ช่วงที่ 1 (1 - 4 ส.ค.)", name: "ของขวัญฝันสีอัสดง·II", price: 60, webPrice: 55, vip: 60, polarisCost: 0, percent: "350%", limit: "2 แพ็ก", limitTicket: 1, permTicket: 0, sumTicket: 1, avg: 60.00, type: "กระรอก (ไม่ถาวร)", bonus: 3 },
+    { buy: false, group: "ของขวัญฝันสีอัสดง ช่วงที่ 2 (4 - 14 ส.ค.)", name: "ของขวัญฝันสีอัสดง·I", price: 30, webPrice: 28, vip: 30, polarisCost: 0, percent: "300%", limit: "1 ครั้ง/วัน", limitTicket: 1, permTicket: 0, sumTicket: 1, avg: 30.00, type: "กระรอก (ไม่ถาวร)", bonus: 0 },
+    { buy: false, group: "ของขวัญฝันสีอัสดง ช่วงที่ 2 (4 - 14 ส.ค.)", name: "ของขวัญฝันสีอัสดง·II", price: 60, webPrice: 55, vip: 60, polarisCost: 0, percent: "350%", limit: "1 ครั้ง/วัน", limitTicket: 1, permTicket: 0, sumTicket: 1, avg: 60.00, type: "กระรอก (ไม่ถาวร)", bonus: 3 },
+    { buy: false, group: "ของขวัญฝันสีอัสดง ช่วงที่ 2 (4 - 14 ส.ค.)", name: "กล่องของขวัญฝันสีอัสดง", price: 150, webPrice: 135, vip: 300, polarisCost: 0, percent: "300%", limit: "6 ครั้ง", limitTicket: 5, permTicket: 0, sumTicket: 5, avg: 30.00, type: "กระรอก (ไม่ถาวร)", bonus: 0 },
+    { buy: false, group: "ของขวัญฝันสีอัสดง ช่วงที่ 2 (4 - 14 ส.ค.)", name: "ข้อเสนอพิเศษสุ่ม 10", price: 0, webPrice: 0, vip: 0, polarisCost: 20, percent: "300%", limit: "1 ครั้ง", limitTicket: 0, permTicket: 10, sumTicket: 10, avg: 0.00, type: "ตั๋วแดง (ถาวร)", bonus: 0 },
+    { buy: false, group: "เซ็ตรอยฝันนิรันดร์ (4 - 14 ส.ค.)", name: "เซ็ตรอยฝันนิรันดร์·I", price: 440, webPrice: 396, vip: 980, polarisCost: 0, percent: "400%", limit: "1 ครั้ง", limitTicket: 15, permTicket: 0, sumTicket: 15, avg: 29.33, type: "กระรอก (ไม่ถาวร)", bonus: 0 },
+    { buy: false, group: "เซ็ตรอยฝันนิรันดร์ (4 - 14 ส.ค.)", name: "เซ็ตรอยฝันนิรันดร์·II", price: 940, webPrice: 846, vip: 1980, polarisCost: 0, percent: "460%", limit: "1 ครั้ง", limitTicket: 35, permTicket: 0, sumTicket: 35, avg: 26.86, type: "กระรอก (ไม่ถาวร)", bonus: 0 },
+    { buy: false, group: "คัดสรรสุ่ม 10 (4 - 14 ส.ค.)", name: "คัดสรรสุ่ม 10·I", price: 490, webPrice: 448, vip: 980, polarisCost: 0, percent: "400%", limit: "1 ครั้ง", limitTicket: 11, permTicket: 0, sumTicket: 11, avg: 44.55, type: "กระรอก (ไม่ถาวร)", bonus: 33 },
+    { buy: false, group: "คัดสรรสุ่ม 10 (4 - 14 ส.ค.)", name: "คัดสรรสุ่ม 10·II", price: 990, webPrice: 891, vip: 1980, polarisCost: 0, percent: "500%", limit: "1 ครั้ง", limitTicket: 33, permTicket: 0, sumTicket: 33, avg: 30.00, type: "กระรอก (ไม่ถาวร)", bonus: 66 },
+    { buy: false, group: "ของขวัญอธิษฐาน (10 - 14 ส.ค.)", name: "กล่องของขวัญหัวใจสุ่ม 10", price: 490, webPrice: 448, vip: 980, polarisCost: 0, percent: "400%", limit: "1 ครั้ง", limitTicket: 0, permTicket: 10, sumTicket: 10, avg: 49.00, type: "ตั๋วแดง (ถาวร)", bonus: 0 },
+    { buy: false, group: "ของขวัญอธิษฐาน (10 - 14 ส.ค.)", name: "กล่องตั๋วสิบครั้งตราประทับ", price: 640, webPrice: 586, vip: 1280, polarisCost: 0, percent: "400%", limit: "1 ครั้ง", limitTicket: 0, permTicket: 20, sumTicket: 20, avg: 32.00, type: "ตั๋วแดง (ถาวร)", bonus: 0 },
+    { buy: false, group: "เฉพาะเว็บช็อป (4 - 14 ส.ค.)", name: "แพ็กพิเศษเฉพาะเว็บช็อป I", price: 2965, webPrice: 2965, vip: 0, polarisCost: 0, percent: "420%", limit: "1 ครั้ง", limitTicket: 100, permTicket: 0, sumTicket: 100, avg: 29.65, type: "กระรอก (ไม่ถาวร)", bonus: 216 },
+    { buy: false, group: "เฉพาะเว็บช็อป (4 - 14 ส.ค.)", name: "แพ็กพิเศษเฉพาะเว็บช็อป II", price: 5929, webPrice: 5929, vip: 0, polarisCost: 0, percent: "500%", limit: "1 ครั้ง", limitTicket: 240, permTicket: 0, sumTicket: 240, avg: 24.70, type: "กระรอก (ไม่ถาวร)", bonus: 432 }
+];
+
+const usdData = [
+    { buy: false, group: "Value Presale · Enchanting Dream Gift Box", name: "[Dreams Woven in Silk Tree Blossoms] Enchanting Dream Gift Box · Silk Tree", price: 11.00, vip: 680, polarisCost: 0, percent: "360%", limit: "1 ครั้ง", limitTicket: 12, permTicket: 0, sumTicket: 12, avg: 0.92, type: "Twilight Dream (limit)", bonus: 0 },
+    { buy: false, group: "Value Presale · Enchanting Dream Gift Box", name: "Dreams Woven in Silk Tree Blossoms] Enchanting Dream Gift Box · Lantern", price: 16.00, vip: 980, polarisCost: 0, percent: "400%", limit: "1 ครั้ง", limitTicket: 18, permTicket: 0, sumTicket: 18, avg: 0.89, type: "Twilight Dream (limit)", bonus: 0 },
+    { buy: false, group: "Gift Pack Series [Dreams Woven in Silk Tree Blossoms]", name: "Twilight Dream Gift Pack · I", price: 0.99, vip: 30, polarisCost: 0, percent: "300%", limit: "2 แพ็ก", limitTicket: 1, permTicket: 0, sumTicket: 1, avg: 0.99, type: "Twilight Dream (limit)", bonus: 0 },
+    { buy: false, group: "Gift Pack Series [Dreams Woven in Silk Tree Blossoms]", name: "Twilight Dream Gift Pack · II", price: 1.95, vip: 60, polarisCost: 0, percent: "350%", limit: "2 แพ็ก", limitTicket: 1, permTicket: 0, sumTicket: 1, avg: 1.95, type: "Twilight Dream (limit)", bonus: 3 },
+    { buy: false, group: "Gift Pack Series [Dreams Woven in Silk Tree Blossoms]", name: "Twilight Dream Gift Pack · I", price: 0.99, vip: 30, polarisCost: 0, percent: "300%", limit: "1 ครั้ง/วัน", limitTicket: 1, permTicket: 0, sumTicket: 1, avg: 0.99, type: "Twilight Dream (limit)", bonus: 0 },
+    { buy: false, group: "Gift Pack Series [Dreams Woven in Silk Tree Blossoms]", name: "Twilight Dream Gift Pack · II", price: 1.95, vip: 60, polarisCost: 0, percent: "350%", limit: "1 ครั้ง/วัน", limitTicket: 1, permTicket: 0, sumTicket: 1, avg: 1.95, type: "Twilight Dream (limit)", bonus: 3 },
+    { buy: false, group: "Gift Pack Series [Dreams Woven in Silk Tree Blossoms]", name: "Twilight Dream Gift Box", price: 4.99, vip: 300, polarisCost: 0, percent: "300%", limit: "6 ครั้ง", limitTicket: 5, permTicket: 0, sumTicket: 5, avg: 1.00, type: "Twilight Dream (limit)", bonus: 0 },
+    { buy: false, group: "Gift Pack Series [Dreams Woven in Silk Tree Blossoms]", name: "Ten-Draw Special Offer", price: 0.00, vip: 0, polarisCost: 20, percent: "300%", limit: "1 ครั้ง", limitTicket: 0, permTicket: 10, sumTicket: 10, avg: 0.00, type: "permanent ticket", bonus: 0 },
+    { buy: false, group: "[Dreams Woven in Silk Tree Blossoms]", name: "Long Dream Set · I", price: 14.49, vip: 980, polarisCost: 0, percent: "400%", limit: "1 ครั้ง", limitTicket: 15, permTicket: 0, sumTicket: 15, avg: 0.97, type: "Twilight Dream (limit)", bonus: 0 },
+    { buy: false, group: "[Dreams Woven in Silk Tree Blossoms]", name: "Long Dream Set · II", price: 31.00, vip: 1980, polarisCost: 0, percent: "460%", limit: "1 ครั้ง", limitTicket: 35, permTicket: 0, sumTicket: 35, avg: 0.89, type: "Twilight Dream (limit)", bonus: 0 },
+    { buy: false, group: "[Dreams Woven in Silk Tree Blossoms]", name: "Ten-Draw Selection · I", price: 16.00, vip: 980, polarisCost: 0, percent: "400%", limit: "1 ครั้ง", limitTicket: 11, permTicket: 0, sumTicket: 11, avg: 1.45, type: "Twilight Dream (limit)", bonus: 33 },
+    { buy: false, group: "[Dreams Woven in Silk Tree Blossoms]", name: "Ten-Draw Selection · II", price: 32.49, vip: 1980, polarisCost: 0, percent: "500%", limit: "1 ครั้ง", limitTicket: 33, permTicket: 0, sumTicket: 33, avg: 0.98, type: "Twilight Dream (limit)", bonus: 66 },
+    { buy: false, group: "Gift Pack Series [Heartfelt Wish Gift]", name: "Ten-Draw Heart Essence Gift Box", price: 16.00, vip: 980, polarisCost: 0, percent: "400%", limit: "1 ครั้ง", limitTicket: 0, permTicket: 10, sumTicket: 10, avg: 1.60, type: "permanent ticket", bonus: 0 },
+    { buy: false, group: "Gift Pack Series [Heartfelt Wish Gift]", name: "Ten-Draw Imprint Gift Box", price: 21.00, vip: 1280, polarisCost: 0, percent: "400%", limit: "1 ครั้ง", limitTicket: 0, permTicket: 20, sumTicket: 20, avg: 1.05, type: "permanent ticket", bonus: 0 },
+    { buy: false, group: "Webshop Value Gift Packs", name: "Webshop Exclusive Gift Box I", price: 99.99, vip: 0, polarisCost: 0, percent: "420%", limit: "1 ครั้ง", limitTicket: 100, permTicket: 0, sumTicket: 100, avg: 1.00, type: "Twilight Dream (limit)", bonus: 216 },
+    { buy: false, group: "Webshop Value Gift Packs", name: "Webshop Exclusive Gift Box II", price: 199.99, vip: 0, polarisCost: 0, percent: "500%", limit: "1 ครั้ง", limitTicket: 240, permTicket: 0, sumTicket: 240, avg: 0.83, type: "Twilight Dream (limit)", bonus: 432 }
+];
+
+let activeCurrency = 'thb';
+
+function renderTables() {
+    // THB
+    const thbTbody = document.querySelector("#thb-table tbody");
+    thbTbody.innerHTML = thbData.map((item, index) => `
+        <tr class="${item.buy ? 'selected-row' : ''}">
+            <td class="text-center">
+                <label class="checkbox-container">
+                    <input type="checkbox" ${item.buy ? 'checked' : ''} onchange="toggleItem('thb', ${index})">
+                </label>
+            </td>
+            <td>${item.group}</td>
+            <td><strong>${item.name}</strong></td>
+            <td class="text-right">${item.price.toLocaleString()}</td>
+            <td class="text-right">${item.webPrice.toLocaleString()}</td>
+            <td class="text-right">${item.vip.toLocaleString()}</td>
+            <td class="text-right">${item.polarisCost}</td>
+            <td class="text-right">${item.percent}</td>
+            <td class="text-center">${item.limit}</td>
+            <td class="text-right">${item.limitTicket}</td>
+            <td class="text-right">${item.permTicket}</td>
+            <td class="text-right"><strong>${item.sumTicket}</strong></td>
+            <td class="text-right">${item.avg.toFixed(2)}</td>
+            <td class="text-center"><span class="${item.type.includes('ไม่ถาวร') ? 'badge-limit' : 'badge-perm'}">${item.type}</span></td>
+            <td class="text-right">${item.bonus}</td>
+        </tr>
+    `).join('');
+
+    // USD
+    const usdTbody = document.querySelector("#usd-table tbody");
+    usdTbody.innerHTML = usdData.map((item, index) => `
+        <tr class="${item.buy ? 'selected-row' : ''}">
+            <td class="text-center">
+                <label class="checkbox-container">
+                    <input type="checkbox" ${item.buy ? 'checked' : ''} onchange="toggleItem('usd', ${index})">
+                </label>
+            </td>
+            <td>${item.group}</td>
+            <td><strong>${item.name}</strong></td>
+            <td class="text-right">$${item.price.toFixed(2)}</td>
+            <td class="text-right">${item.vip.toLocaleString()}</td>
+            <td class="text-right">${item.polarisCost}</td>
+            <td class="text-right">${item.percent}</td>
+            <td class="text-center">${item.limit}</td>
+            <td class="text-right">${item.limitTicket}</td>
+            <td class="text-right">${item.permTicket}</td>
+            <td class="text-right"><strong>${item.sumTicket}</strong></td>
+            <td class="text-right">$${item.avg.toFixed(2)}</td>
+            <td class="text-center"><span class="${item.type.includes('limit') ? 'badge-limit' : 'badge-perm'}">${item.type}</span></td>
+            <td class="text-right">${item.bonus}</td>
+        </tr>
+    `).join('');
+
+    calculateTotals();
+}
+
+function toggleItem(currency, index) {
+    if (currency === 'thb') {
+        thbData[index].buy = !thbData[index].buy;
+    } else {
+        usdData[index].buy = !usdData[index].buy;
+    }
+    renderTables();
+}
+
+function selectAll(status) {
+    if (activeCurrency === 'thb') {
+        thbData.forEach(item => item.buy = status);
+    } else {
+        usdData.forEach(item => item.buy = status);
+    }
+    renderTables();
+}
+
+function calculateTotals() {
+    let totalPrice = 0;
+    let totalWebPrice = 0;
+    let totalVip = 0;
+    let totalPolaris = 0;
+    let totalPulls = 0;
+
+    const data = activeCurrency === 'thb' ? thbData : usdData;
+
+    data.forEach(item => {
+        if (item.buy) {
+            totalPrice += item.price;
+            if (activeCurrency === 'thb') totalWebPrice += item.webPrice;
+            totalVip += item.vip;
+            totalPolaris += item.polarisCost;
+            totalPulls += item.sumTicket;
+        }
+    });
+
+    const avg = totalPulls > 0 ? (totalPrice / totalPulls) : 0;
+
+    if (activeCurrency === 'thb') {
+        document.getElementById("total-price").innerText = `${totalPrice.toLocaleString()} บาท`;
+        document.getElementById("total-webshop").innerText = `${totalWebPrice.toLocaleString()} บาท`;
+        document.getElementById("total-vip").innerText = `${totalVip.toLocaleString()} VIP / ${totalPolaris} ดาว`;
+        document.getElementById("total-pulls").innerText = `${totalPulls.toLocaleString()} ครั้ง`;
+        document.getElementById("avg-price-per-pull").innerText = `${avg.toFixed(2)} บาท`;
+    } else {
+        document.getElementById("total-price").innerText = `$${totalPrice.toFixed(2)}`;
+        document.getElementById("total-webshop").innerText = `-`;
+        document.getElementById("total-vip").innerText = `${totalVip.toLocaleString()} VIP / ${totalPolaris} Polaris`;
+        document.getElementById("total-pulls").innerText = `${totalPulls.toLocaleString()} pulls`;
+        document.getElementById("avg-price-per-pull").innerText = `$${avg.toFixed(2)}`;
+    }
+}
+
+function switchTab(currency) {
+    activeCurrency = currency;
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+    if (currency === 'thb') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('tab-thb').classList.add('active');
+    } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('tab-usd').classList.add('active');
+    }
+    calculateTotals();
+}
+
+// Initial Render
+renderTables();
+</script>
+
+</body>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,147 +491,7 @@
   gtag('config', 'G-4QNXS3SG2H');
 </script>
   <title>Prompt สำหรับวิเคราะห์กาชาตู้ [ธุลีล่องรอยฝัน] - Light and Night TH</title>
-  <style>
-    :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --text-main: #f8fafc;
-      --text-sub: #94a3b8;
-      --accent: #d97706;
-      --accent-hover: #b45309;
-      --border: #334155;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      padding: 2rem 1rem;
-      min-height: 100vh;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 850px;
-      background-color: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .header {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1.25rem;
-    }
-
-    .header h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .header p {
-      color: var(--text-sub);
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    .action-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .status-text {
-      font-size: 0.85rem;
-      color: var(--text-sub);
-    }
-
-    .btn-copy {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
-    }
-
-    .btn-copy:hover {
-      background: linear-gradient(135deg, #d97706, #b45309);
-      transform: translateY(-1px);
-    }
-
-    .btn-copy:active {
-      transform: translateY(1px);
-    }
-
-    .btn-copy.copied {
-      background: #10b981;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-    }
-
-    .textarea-wrapper {
-      position: relative;
-      width: 100%;
-    }
-
-    textarea {
-      width: 100%;
-      height: 520px;
-      background-color: #0b1120;
-      color: #e2e8f0;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
-      font-family: "Courier New", Courier, monospace;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      resize: vertical;
-      outline: none;
-      transition: border-color 0.2s ease;
-    }
-
-    textarea:focus {
-      border-color: #64748b;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 1.25rem;
-      }
-      .action-bar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .btn-copy {
-        justify-content: center;
-      }
-    }
-  </style>
+  
 </head>
 <body>
 
