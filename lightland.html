@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="th">
+        <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4QNXS3SG2H"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4QNXS3SG2H');
+</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คำนวณแพ็กเกจ Light and Night / Pack Calculator</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --purple: #8e44ad;
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            padding: 15px;
+            padding-bottom: 90px;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h1 span {
+            display: block;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            font-weight: normal;
+        }
+
+        /* Summary Dashboard */
+        .summary-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--accent);
+        }
+
+        .summary-card h2 {
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+        }
+
+        .summary-item {
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .summary-item.highlight {
+            border-left-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .summary-item.vip {
+            border-left-color: var(--purple);
+            background: #faf5ff;
+        }
+
+        .summary-item .label {
+            font-size: 0.72rem;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .summary-item .value {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Toggle Column Section */
+        .controls-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .controls-card span {
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: var(--primary);
+        }
+
+        .toggle-btn {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: var(--purple);
+            color: white;
+        }
+
+        /* Table Desktop View (Keep Table Layout) */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow-x: auto;
+            margin-bottom: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #1e293b;
+            color: #ffffff;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            line-height: 1.2;
+        }
+
+        th span {
+            display: block;
+            font-size: 0.72rem;
+            color: #94a3b8;
+            font-weight: normal;
+        }
+
+        tr:hover { background-color: #f1f5f9; }
+        tr.selected { background-color: #e0f2fe; }
+
+        /* Hidden Class for Toggle Columns */
+        .hide-col-tw, .hide-col-en, .hide-col-th {
+            display: none !important;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--purple);
+        }
+
+        .tag-group {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .badge-percent {
+            color: #d97706;
+            font-weight: bold;
+        }
+
+        /* Mobile Sticky Summary Bar */
+        .sticky-bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
+            z-index: 1000;
+        }
+
+        .sticky-info div {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+        }
+
+        .sticky-info .sticky-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4ade80;
+        }
+
+        .sticky-pulls {
+            text-align: right;
+            font-size: 0.85rem;
+            background: rgba(255,255,255,0.15);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        /* Prompt Card */
+        .prompt-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--purple);
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .prompt-header h3 {
+            font-size: 0.95rem;
+            color: var(--primary);
+        }
+
+        .copy-btn {
+            background-color: var(--purple);
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+
+        textarea.prompt-area {
+            width: 100%;
+            height: 180px;
+            font-family: monospace;
+            font-size: 0.78rem;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>คำนวณแพ็กเกจ Light and Night <span>(Pack Calculator)</span></h1>
+
+    <!-- Summary Section -->
+    <div class="summary-card">
+        <h2>📊 สรุปผลรวมแพ็กเกจที่เลือกซื้อ / Purchase Summary</h2>
+        <div class="summary-grid">
+            <div class="summary-item highlight">
+                <div class="label">ยอดเงินรวม / Total (THB)</div>
+                <div class="value" id="total-thb">฿0</div>
+            </div>
+            <div class="summary-item">
+                <div class="label">ยอดเงินรวม / Total (USD)</div>
+                <div class="value" id="total-usd">$0.00</div>
+            </div>
+            <div class="summary-item">
+                <div class="label">ยอดเงินรวม / Total (NTD)</div>
+                <div class="value" id="total-ntd">$0</div>
+            </div>
+            <div class="summary-item">
+                <div class="label">ดาวเหนือที่ใช้ / Polaris Cost</div>
+                <div class="value" id="total-cost-polaris">0 ดวง</div>
+            </div>
+            <div class="summary-item highlight">
+                <div class="label">สุ่มจำกัดเวลา / Event Pulls</div>
+                <div class="value" id="total-temp-pulls">0 ครั้ง</div>
+            </div>
+            <div class="summary-item highlight">
+                <div class="label">สุ่มถาวร / Permanent Pulls</div>
+                <div class="value" id="total-perm-pulls">0 ครั้ง</div>
+            </div>
+            <div class="summary-item highlight">
+                <div class="label">รวมสุ่มทั้งหมด / Total Pulls</div>
+                <div class="value" id="total-pulls">0 ครั้ง</div>
+            </div>
+            <div class="summary-item">
+                <div class="label">ดาวหมีเล็ก / Ursa Minor</div>
+                <div class="value" id="total-bear">0 ดวง</div>
+            </div>
+            <div class="summary-item">
+                <div class="label">ดาวเหนือแถม / Bonus Polaris</div>
+                <div class="value" id="total-bonus-polaris">0 ดวง</div>
+            </div>
+            <div class="summary-item vip">
+                <div class="label">VIP Points / Total VIP</div>
+                <div class="value" id="total-vip">0 คะแนน</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toggle Language Column Controls -->
+    <div class="controls-card">
+        <span>👁️ แสดง/ซ่อน ภาษาคอลัมน์:</span>
+        <button class="toggle-btn active" id="btn-th" onclick="toggleColumn('th')">🇹🇭 ไทย (TH)</button>
+        <button class="toggle-btn active" id="btn-tw" onclick="toggleColumn('tw')">🇹🇼 ไต้หวัน (TW)</button>
+        <button class="toggle-btn active" id="btn-en" onclick="toggleColumn('en')">🇬🇧 อังกฤษ (EN)</button>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>เลือกซื้อ<span>Select</span></th>
+                    <th>กลุ่มแพ็กเกจ / ช่วงเวลา<span>Group / Date</span></th>
+                    <th class="col-th">ชื่อแพ็กเกจ (ไทย)<span>Thai Name</span></th>
+                    <th class="col-tw">ชื่อแพ็กเกจ (ไต้หวัน)<span>Taiwan Name</span></th>
+                    <th class="col-en">ชื่อแพ็กเกจ (ENG)<span>English Name</span></th>
+                    <th>ราคา (NTD)<span>Price (NTD)</span></th>
+                    <th>ราคา (THB)<span>Price (THB)</span></th>
+                    <th>ราคา (USD)<span>Price (USD)</span></th>
+                    <th>ดาวเหนือที่ใช้<span>Polaris Cost</span></th>
+                    <th>ความคุ้มค่า<span>Value Ratio</span></th>
+                    <th>จำกัดซื้อ<span>Purchase Limit</span></th>
+                    <th>สุ่มจำกัดเวลา (ครั้ง)<span>Event Pulls</span></th>
+                    <th>สุ่มถาวร (ครั้ง)<span>Permanent Pulls</span></th>
+                    <th>ดาวหมีเล็ก<span>Ursa Minor</span></th>
+                    <th>รวมสุ่ม (ครั้ง)<span>Total Pulls</span></th>
+                    <th>ดาวเหนือแถม<span>Bonus Polaris</span></th>
+                    <th>VIP Points<span>VIP Points</span></th>
+                </tr>
+            </thead>
+            <tbody id="pack-table-body">
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Sticky Bottom Bar -->
+    <div class="sticky-bottom-bar">
+        <div class="sticky-info">
+            <div>ยอดเงินรวมทั้งหมด</div>
+            <div class="sticky-price" id="sticky-thb">฿0</div>
+        </div>
+        <div class="sticky-pulls">
+            สุ่มรวม: <strong id="sticky-pulls" style="color:#4ade80;">0</strong> ครั้ง
+        </div>
+    </div>
+
+    <!-- AI Prompt Section -->
+    <div class="prompt-card">
+        <div class="prompt-header">
+            <h3>🤖 Prompt สำหรับคัดลอกไปถาม AI</h3>
+            <button class="copy-btn" onclick="copyPromptText()">Copy Prompt</button>
+        </div>
+        <textarea id="ai-prompt-text" class="prompt-area" readonly>
+จากข้อมูลตารางแพ็กเกจสินค้าในเกม และเงื่อนไขที่เกมมีการ "แจกฟรีทั้งหมด 43 สุ่ม" ด้านล่างนี้:
+
+[เงื่อนไขเพิ่มเติม]
+- จำนวนสุ่มฟรีจากเกม: 43 สุ่ม
+- ซื้อแพ็กเกจเว็บช็อป (GH) จะได้สุ่มเยอะแต่ไม่ได้คะแนน VIP Point ในเกม
+- แพ็กเกจขั้น II จะต้องซื้อขั้น I ในซีรีส์เดียวกันก่อนเสมอ
+- แพ็กเกจประเภทรายวันคำนวณแบบซื้อครบตลอดช่วงกิจกรรม
+
+[ข้อมูลดิบตารางแพ็กเกจ]
+ซื้อหรือไม่	กลุ่มแพ็กเกจ (พรีออเด้อ / วันที่ขาย)	ชื่อแพ็กเกจ(ไต้หวัน)	ชื่อแพค ไทย	ENG name	ราคา (NTD)	THB	USD	ดาวเหนือที่ใช้	สุดคุ้ม (%)	จำกัดการซื้อ	สุ่มจำกัดเวลา (ครั้ง)	สุ่มถาวร (ครั้ง)	หมีเล็ก	รวมสุ่ม (ครั้ง)	ดาวเหนือแถม	VIP point
+	พรีออเดอร์ (25/09 - 27/09/2026)	慾海狂瀾·限時預售	ทะเลปรารถนาบ้าคลั่ง พรีเซลจำกัดเวลา	Desire Raging Waves Limited-Time Pre-Sale	230	225	7.39	0	420%	1 ครั้ง	8	0	0	8	0	450
+	[ลำนำในไนท์แลนด์] (25/09 - 02/10/2026)	奈特蘭之詩超值特惠	[ไนท์แลนด์ฯ] #ดีลสุดคุ้ม	[PoN] #Super Value Special Offer	10	10	0.39	0	2000%	1 ครั้ง	0	0	200	0	0	20
+	[ลำนำในไนท์แลนด์] (25/09 - 02/10/2026)	奈特蘭之詩十連自選·慾海	[ไนท์แลนด์ฯ] #ตั๋วสิบ·ทะเลปรารถนา	[PoN] #Ten-Draw Selection·Desire Sea	490	490	16.00	0	400%	1 ครั้ง	20	0	0	20	0	980
+	[ลำนำในไนท์แลนด์] (25/09 - 02/10/2026)	奈特蘭之詩十連自選·榮光	[ไนท์แลนด์ฯ] #ตั๋วสิบ·เกียรติภูมิ	[PoN] #Ten-Draw Selection·Glory	490	490	16.00	0	400%	2 ครั้ง	0	10	0	10	32	980
+	[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)	奈特蘭之詩每日華章·I	[ไนท์แลนด์ฯ] #เกียรติยศรายวัน·I	[PoN] #Daily Anthem·I	33	30	0.99	0	300%	1 ครั้ง / วัน	1	0	0	1	0	60
+	[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)	奈特蘭之詩每日華章·II	[ไนท์แลนด์ฯ] #เกียรติยศรายวัน·II	[PoN] #Daily Anthem·II	70	60	1.95	0	350%	1 ครั้ง / วัน	1	0	0	1	3	120
+	[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)	奈特蘭之詩170元華章禮盒	[ไนท์แลนด์ฯ] #ล่องเกียรติยศ	[PoN] #Anthem Gift Box	170	150	4.99	0	300%	6 ครั้ง	5	0	0	5	0	300
+	[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)	奈特蘭之詩十連特惠	[ไนท์แลนด์ฯ] #ตั๋วสิบสุดคุ้ม	[PoN] #Ten-Draw Special Offer	0	0	0.00	20	300%	1 ครั้ง	0	10	0	10	0	0
+	[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)	奈特蘭之詩十連華章·I	[ไนท์แลนด์ฯ] #ตั๋วสิบเกียรติยศ·I	[PoN] #Ten-Draw Anthem·I	330	340	11.00	0	360%	1 ครั้ง	12	0	0	12	0	680
+	[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)	奈特蘭之詩十連華章·II	[ไนท์แลนด์ฯ] #ตั๋วสิบเกียรติยศ·II	[PoN] #Ten-Draw Anthem·II	670	640	21.00	0	400%	1 ครั้ง	25	0	0	25	0	1280
+	[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)	奈特蘭之詩十連精選·I	[ไนท์แลนด์ฯ] #ตั๋วสิบครั้งคัดสรร·I	[PoN] #Ten-Draw Selection·I	490	490	16.00	0	400%	1 ครั้ง	11	0	0	11	33	980
+	[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)	奈特蘭之詩十連精選·II	[ไนท์แลนด์ฯ] #ตั๋วสิบครั้งคัดสรร·II	[PoN] #Ten-Draw Selection·II	990	990	32.49	0	500%	1 ครั้ง	33	0	0	33	66	1980
+	[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)	[奈特蘭之詩]珍瑰沙漏禮盒	[ไนท์แลนด์ฯ] #กล่องนาฬิกาทรายล้ำค่า	[PoN] #Exquisite Hourglass Gift Box	170	150	4.99	0	400%	ไม่จำกัด	0	0	0	0	10	300
+	กล่องของขวัญ (27/09 - 07/10/2026)	榮光禮盒	กล่องของขวัญเกียรติยศ	Glory Gift Box	0	0	0.00	1	0%	50 ครั้ง / วัน	0	0	0	0	0	0
+	เว็บช็อป / GH (27/09 - 07/10/2026)	GH平台奈特蘭超值禮盒一	[ไนท์แลนด์ฯ] แพ็กพิเศษเว็บช็อป I	[PoN] Webshop Exclusive Gift Box I	3290	2965	99.99	0	420%	1 ครั้ง	100	0	0	100	216	0
+	เว็บช็อป / GH (27/09 - 07/10/2026)	GH平台奈特蘭超值禮盒二	[ไนท์แลนด์ฯ] แพ็กพิเศษเว็บช็อป II	[PoN] Webshop Exclusive Gift Box II	6480	5929	199.99	0	420%	1 ครั้ง	240	0	0	240	432	0
+
+โปรดช่วยคำนวณและเสนอตัวเลือกแพ็กเกจที่คุ้มค่าที่สุด (จ่ายเงินรวมน้อยที่สุดในหน่วย THB) ตามเป้าหมายดังนี้:
+
+โจทย์ข้อที่ 1: ต้องการสุ่มรวมให้ได้ 100 สุ่ม (หักแจกฟรี 43 สุ่มแล้ว = ต้องเติมเพิ่มอีก 57 สุ่ม)
+- ตัวเลือก A (เน้นคุ้มค่า ไม่สนใจแต้ม VIP): เสนอชุดแพ็กเกจที่จ่ายน้อยที่สุด
+- ตัวเลือก B (เน้นเก็บแต้ม VIP ในเกม): เสนอชุดแพ็กเกจที่ซื้อในเกมเท่านั้นและจ่ายน้อยที่สุด พร้อมสรุปแต้ม VIP ที่ได้
+
+โจทย์ข้อที่ 2: ต้องการสุ่มรวมให้ได้ 140 สุ่ม (หักแจกฟรี 43 สุ่มแล้ว = ต้องเติมเพิ่มอีก 97 สุ่ม)
+- ตัวเลือก A (เน้นคุ้มค่า ไม่สนใจแต้ม VIP): เสนอชุดแพ็กเกจที่จ่ายน้อยที่สุด
+- ตัวเลือก B (เน้นเก็บแต้ม VIP ในเกม): เสนอชุดแพ็กเกจที่ซื้อในเกมเท่านั้นและจ่ายน้อยที่สุด พร้อมสรุปแต้ม VIP ที่ได้
+
+โจทย์ข้อที่ 3: ต้องการสุ่มรวมให้ได้ 200 สุ่ม (หักแจกฟรี 43 สุ่มแล้ว = ต้องเติมเพิ่มอีก 157 สุ่ม)
+- ตัวเลือก A (เน้นคุ้มค่า ไม่สนใจแต้ม VIP): เสนอชุดแพ็กเกจที่จ่ายน้อยที่สุด
+- ตัวเลือก B (เน้นเก็บแต้ม VIP ในเกม): เสนอชุดแพ็กเกจที่ซื้อในเกมเท่านั้นและจ่ายน้อยที่สุด พร้อมสรุปแต้ม VIP ที่ได้
+
+โปรดสรุปชื่อแพ็กเกจที่ต้องซื้อ ราคารวม (THB) และจำนวนสุ่มสุทธิที่ได้รับในแต่ละตัวเลือกให้ชัดเจน
+        </textarea>
+    </div>
+
+    <script>
+        const packData = [
+            { group: "พรีออเดอร์ (25/09 - 27/09/2026)", tw: "慾海狂瀾·限時預售", th: "ทะเลปรารถนาบ้าคลั่ง พรีเซลจำกัดเวลา", en: "Desire Raging Waves Limited-Time Pre-Sale", ntd: 230, thb: 225, usd: 7.39, costPolaris: 0, percent: "420%", limit: "1 ครั้ง", tempPulls: 8, permPulls: 0, bear: 0, totalPulls: 8, bonusPolaris: 0, vip: 450 },
+            { group: "[ลำนำในไนท์แลนด์] (25/09 - 02/10/2026)", tw: "奈特蘭之詩超值特惠", th: "[ไนท์แลนด์ฯ] #ดีลสุดคุ้ม", en: "[PoN] #Super Value Special Offer", ntd: 10, thb: 10, usd: 0.39, costPolaris: 0, percent: "2000%", limit: "1 ครั้ง", tempPulls: 0, permPulls: 0, bear: 200, totalPulls: 0, bonusPolaris: 0, vip: 20 },
+            { group: "[ลำนำในไนท์แลนด์] (25/09 - 02/10/2026)", tw: "奈特蘭之詩十連自選·慾海", th: "[ไนท์แลนด์ฯ] #ตั๋วสิบ·ทะเลปรารถนา", en: "[PoN] #Ten-Draw Selection·Desire Sea", ntd: 490, thb: 490, usd: 16.00, costPolaris: 0, percent: "400%", limit: "1 ครั้ง", tempPulls: 20, permPulls: 0, bear: 0, totalPulls: 20, bonusPolaris: 0, vip: 980 },
+            { group: "[ลำนำในไนท์แลนด์] (25/09 - 02/10/2026)", tw: "奈特蘭之詩十連自選·榮光", th: "[ไนท์แลนด์ฯ] #ตั๋วสิบ·เกียรติภูมิ", en: "[PoN] #Ten-Draw Selection·Glory", ntd: 490, thb: 490, usd: 16.00, costPolaris: 0, percent: "400%", limit: "2 ครั้ง", tempPulls: 0, permPulls: 10, bear: 0, totalPulls: 10, bonusPolaris: 32, vip: 980 },
+            { group: "[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)", tw: "奈特蘭之詩每日華章·I", th: "[ไนท์แลนด์ฯ] #เกียรติยศรายวัน·I", en: "[PoN] #Daily Anthem·I", ntd: 33, thb: 30, usd: 0.99, costPolaris: 0, percent: "300%", limit: "1 ครั้ง / วัน", tempPulls: 1, permPulls: 0, bear: 0, totalPulls: 1, bonusPolaris: 0, vip: 60 },
+            { group: "[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)", tw: "奈特蘭之詩每日華章·II", th: "[ไนท์แลนด์ฯ] #เกียรติยศรายวัน·II", en: "[PoN] #Daily Anthem·II", ntd: 70, thb: 60, usd: 1.95, costPolaris: 0, percent: "350%", limit: "1 ครั้ง / วัน", tempPulls: 1, permPulls: 0, bear: 0, totalPulls: 1, bonusPolaris: 3, vip: 120 },
+            { group: "[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)", tw: "奈特蘭之詩170元華章禮盒", th: "[ไนท์แลนด์ฯ] #ล่องเกียรติยศ", en: "[PoN] #Anthem Gift Box", ntd: 170, thb: 150, usd: 4.99, costPolaris: 0, percent: "300%", limit: "6 ครั้ง", tempPulls: 5, permPulls: 0, bear: 0, totalPulls: 5, bonusPolaris: 0, vip: 300 },
+            { group: "[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)", tw: "奈特蘭之詩十連特惠", th: "[ไนท์แลนด์ฯ] #ตั๋วสิบสุดคุ้ม", en: "[PoN] #Ten-Draw Special Offer", ntd: 0, thb: 0, usd: 0.00, costPolaris: 20, percent: "300%", limit: "1 ครั้ง", tempPulls: 0, permPulls: 10, bear: 0, totalPulls: 10, bonusPolaris: 0, vip: 0 },
+            { group: "[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)", tw: "奈特蘭之詩十連華章·I", th: "[ไนท์แลนด์ฯ] #ตั๋วสิบเกียรติยศ·I", en: "[PoN] #Ten-Draw Anthem·I", ntd: 330, thb: 340, usd: 11.00, costPolaris: 0, percent: "360%", limit: "1 ครั้ง", tempPulls: 12, permPulls: 0, bear: 0, totalPulls: 12, bonusPolaris: 0, vip: 680 },
+            { group: "[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)", tw: "奈特蘭之詩十連華章·II", th: "[ไนท์แลนด์ฯ] #ตั๋วสิบเกียรติยศ·II", en: "[PoN] #Ten-Draw Anthem·II", ntd: 670, thb: 640, usd: 21.00, costPolaris: 0, percent: "400%", limit: "1 ครั้ง", tempPulls: 25, permPulls: 0, bear: 0, totalPulls: 25, bonusPolaris: 0, vip: 1280 },
+            { group: "[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)", tw: "奈特蘭之詩十連精選·I", th: "[ไนท์แลนด์ฯ] #ตั๋วสิบครั้งคัดสรร·I", en: "[PoN] #Ten-Draw Selection·I", ntd: 490, thb: 490, usd: 16.00, costPolaris: 0, percent: "400%", limit: "1 ครั้ง", tempPulls: 11, permPulls: 0, bear: 0, totalPulls: 11, bonusPolaris: 33, vip: 980 },
+            { group: "[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)", tw: "奈特蘭之詩十連精選·II", th: "[ไนท์แลนด์ฯ] #ตั๋วสิบครั้งคัดสรร·II", en: "[PoN] #Ten-Draw Selection·II", ntd: 990, thb: 990, usd: 32.49, costPolaris: 0, percent: "500%", limit: "1 ครั้ง", tempPulls: 33, permPulls: 0, bear: 0, totalPulls: 33, bonusPolaris: 66, vip: 1980 },
+            { group: "[ลำนำในไนท์แลนด์] (27/09 - 07/10/2026)", tw: "[奈特蘭之詩]珍瑰沙漏禮盒", th: "[ไนท์แลนด์ฯ] #กล่องนาฬิกาทรายล้ำค่า", en: "[PoN] #Exquisite Hourglass Gift Box", ntd: 170, thb: 150, usd: 4.99, costPolaris: 0, percent: "400%", limit: "ไม่จำกัด", tempPulls: 0, permPulls: 0, bear: 0, totalPulls: 0, bonusPolaris: 10, vip: 300 },
+            { group: "กล่องของขวัญ (27/09 - 07/10/2026)", tw: "榮光禮盒", th: "กล่องของขวัญเกียรติยศ", en: "Glory Gift Box", ntd: 0, thb: 0, usd: 0.00, costPolaris: 1, percent: "-", limit: "50 ครั้ง / วัน", tempPulls: 0, permPulls: 0, bear: 0, totalPulls: 0, bonusPolaris: 0, vip: 0 },
+            { group: "เว็บช็อป / GH (27/09 - 07/10/2026)", tw: "GH平台奈特蘭超值禮盒一", th: "[ไนท์แลนด์ฯ] แพ็กพิเศษเว็บช็อป I", en: "[PoN] Webshop Exclusive Gift Box I", ntd: 3290, thb: 2965, usd: 99.99, costPolaris: 0, percent: "420%", limit: "1 ครั้ง", tempPulls: 100, permPulls: 0, bear: 0, totalPulls: 100, bonusPolaris: 216, vip: 0 },
+            { group: "เว็บช็อป / GH (27/09 - 07/10/2026)", tw: "GH平台奈特蘭超值禮盒二", th: "[ไนท์แลนด์ฯ] แพ็กพิเศษเว็บช็อป II", en: "[PoN] Webshop Exclusive Gift Box II", ntd: 6480, thb: 5929, usd: 199.99, costPolaris: 0, percent: "420%", limit: "1 ครั้ง", tempPulls: 240, permPulls: 0, bear: 0, totalPulls: 240, bonusPolaris: 432, vip: 0 }
+        ];
+
+        function renderTable() {
+            const tbody = document.getElementById('pack-table-body');
+            tbody.innerHTML = '';
+
+            packData.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.id = `row-${index}`;
+                tr.innerHTML = `
+                    <td><input type="checkbox" onchange="calculateSummary()" data-index="${index}"></td>
+                    <td><span class="tag-group">${item.group}</span></td>
+                    <td class="col-th"><strong>${item.th}</strong></td>
+                    <td class="col-tw">${item.tw}</td>
+                    <td class="col-en"><em>${item.en}</em></td>
+                    <td>$${item.ntd}</td>
+                    <td>฿${item.thb.toLocaleString()}</td>
+                    <td>$${item.usd.toFixed(2)}</td>
+                    <td>${item.costPolaris > 0 ? item.costPolaris + ' ดวง' : '-'}</td>
+                    <td><span class="badge-percent">${item.percent}</span></td>
+                    <td>${item.limit}</td>
+                    <td>${item.tempPulls > 0 ? item.tempPulls + ' ครั้ง' : '-'}</td>
+                    <td>${item.permPulls > 0 ? item.permPulls + ' ครั้ง' : '-'}</td>
+                    <td>${item.bear > 0 ? item.bear + ' ดวง' : '-'}</td>
+                    <td>${item.totalPulls > 0 ? item.totalPulls + ' ครั้ง' : '-'}</td>
+                    <td>${item.bonusPolaris > 0 ? item.bonusPolaris + ' ดวง' : '-'}</td>
+                    <td>${item.vip > 0 ? item.vip.toLocaleString() : '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleColumn(lang) {
+            const cols = document.querySelectorAll(`.col-${lang}`);
+            const btn = document.getElementById(`btn-${lang}`);
+            
+            cols.forEach(col => {
+                col.classList.toggle(`hide-col-${lang}`);
+            });
+            btn.classList.toggle('active');
+        }
+
+        function calculateSummary() {
+            let totalThb = 0;
+            let totalUsd = 0;
+            let totalNtd = 0;
+            let totalCostPolaris = 0;
+            let totalTempPulls = 0;
+            let totalPermPulls = 0;
+            let totalPulls = 0;
+            let totalBear = 0;
+            let totalBonusPolaris = 0;
+            let totalVip = 0;
+
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                const index = cb.getAttribute('data-index');
+                const row = document.getElementById(`row-${index}`);
+                
+                if (cb.checked) {
+                    row.classList.add('selected');
+                    totalThb += packData[index].thb;
+                    totalUsd += packData[index].usd;
+                    totalNtd += packData[index].ntd;
+                    totalCostPolaris += packData[index].costPolaris;
+                    totalTempPulls += packData[index].tempPulls;
+                    totalPermPulls += packData[index].permPulls;
+                    totalPulls += packData[index].totalPulls;
+                    totalBear += packData[index].bear;
+                    totalBonusPolaris += packData[index].bonusPolaris;
+                    totalVip += packData[index].vip;
+                } else {
+                    row.classList.remove('selected');
+                }
+            });
+
+            document.getElementById('total-thb').innerText = `฿${totalThb.toLocaleString()}`;
+            document.getElementById('total-usd').innerText = `$${totalUsd.toFixed(2)}`;
+            document.getElementById('total-ntd').innerText = `$${totalNtd.toLocaleString()}`;
+            document.getElementById('total-cost-polaris').innerText = `${totalCostPolaris.toLocaleString()} ดวง`;
+            document.getElementById('total-temp-pulls').innerText = `${totalTempPulls.toLocaleString()} ครั้ง`;
+            document.getElementById('total-perm-pulls').innerText = `${totalPermPulls.toLocaleString()} ครั้ง`;
+            document.getElementById('total-pulls').innerText = `${totalPulls.toLocaleString()} ครั้ง`;
+            document.getElementById('total-bear').innerText = `${totalBear.toLocaleString()} ดวง`;
+            document.getElementById('total-bonus-polaris').innerText = `${totalBonusPolaris.toLocaleString()} ดวง`;
+            document.getElementById('total-vip').innerText = `${totalVip.toLocaleString()} คะแนน`;
+
+            document.getElementById('sticky-thb').innerText = `฿${totalThb.toLocaleString()}`;
+            document.getElementById('sticky-pulls').innerText = `${totalPulls.toLocaleString()}`;
+        }
+
+        function copyPromptText() {
+            const promptText = document.getElementById("ai-prompt-text");
+            promptText.select();
+            promptText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(promptText.value);
+            
+            const btn = document.querySelector(".copy-btn");
+            btn.innerText = "Copied!";
+            btn.style.backgroundColor = "var(--success)";
+            setTimeout(() => {
+                btn.innerText = "Copy Prompt";
+                btn.style.backgroundColor = "var(--purple)";
+            }, 2000);
+        }
+
+        renderTable();
+    </script>
+</body>
+</html>
