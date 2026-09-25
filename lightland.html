@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="th">
-        <!-- Google tag (gtag.js) -->
+<head>
+            <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4QNXS3SG2H"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -9,7 +10,6 @@
 
   gtag('config', 'G-4QNXS3SG2H');
 </script>
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>คำนวณแพ็กเกจ Light and Night / Pack Calculator</title>
@@ -140,7 +140,7 @@
             color: white;
         }
 
-        /* Table Desktop View (Keep Table Layout) */
+        /* Table Desktop View */
         .table-container {
             background: var(--card-bg);
             border-radius: 12px;
@@ -204,6 +204,14 @@
         .badge-percent {
             color: #d97706;
             font-weight: bold;
+        }
+
+        .badge-avg {
+            color: #2563eb;
+            font-weight: bold;
+            background: #eff6ff;
+            padding: 2px 6px;
+            border-radius: 6px;
         }
 
         /* Mobile Sticky Summary Bar */
@@ -309,9 +317,9 @@
                 <div class="label">ยอดเงินรวม / Total (NTD)</div>
                 <div class="value" id="total-ntd">$0</div>
             </div>
-            <div class="summary-item">
-                <div class="label">ดาวเหนือที่ใช้ / Polaris Cost</div>
-                <div class="value" id="total-cost-polaris">0 ดวง</div>
+            <div class="summary-item highlight">
+                <div class="label">เฉลี่ยต่อสุ่ม / Avg Price</div>
+                <div class="value" id="total-avg-roll">฿0 / โรล</div>
             </div>
             <div class="summary-item highlight">
                 <div class="label">สุ่มจำกัดเวลา / Event Pulls</div>
@@ -340,12 +348,12 @@
         </div>
     </div>
 
-    <!-- Toggle Language Column Controls -->
+    <!-- Toggle Language / Currency Column Controls -->
     <div class="controls-card">
-        <span>👁️ แสดง/ซ่อน ภาษาคอลัมน์:</span>
-        <button class="toggle-btn active" id="btn-th" onclick="toggleColumn('th')">🇹🇭 ไทย (TH)</button>
-        <button class="toggle-btn active" id="btn-tw" onclick="toggleColumn('tw')">🇹🇼 ไต้หวัน (TW)</button>
-        <button class="toggle-btn active" id="btn-en" onclick="toggleColumn('en')">🇬🇧 อังกฤษ (EN)</button>
+        <span>👁️ แสดง/ซ่อน ภาษาและราคา:</span>
+        <button class="toggle-btn active" id="btn-th" onclick="toggleColumn('th')">🇹🇭 ไทย (THB / ชื่อไทย)</button>
+        <button class="toggle-btn active" id="btn-tw" onclick="toggleColumn('tw')">🇹🇼 ไต้หวัน (NTD / ชื่อไต้หวัน)</button>
+        <button class="toggle-btn active" id="btn-en" onclick="toggleColumn('en')">🇬🇧 อังกฤษ (USD / ชื่อ ENG)</button>
     </div>
 
     <!-- Data Table -->
@@ -358,10 +366,10 @@
                     <th class="col-th">ชื่อแพ็กเกจ (ไทย)<span>Thai Name</span></th>
                     <th class="col-tw">ชื่อแพ็กเกจ (ไต้หวัน)<span>Taiwan Name</span></th>
                     <th class="col-en">ชื่อแพ็กเกจ (ENG)<span>English Name</span></th>
-                    <th>ราคา (NTD)<span>Price (NTD)</span></th>
-                    <th>ราคา (THB)<span>Price (THB)</span></th>
-                    <th>ราคา (USD)<span>Price (USD)</span></th>
-                    <th>ดาวเหนือที่ใช้<span>Polaris Cost</span></th>
+                    <th class="col-th">ราคา (THB)<span>Price (THB)</span></th>
+                    <th class="col-tw">ราคา (NTD)<span>Price (NTD)</span></th>
+                    <th class="col-en">ราคา (USD)<span>Price (USD)</span></th>
+                    <th>เฉลี่ย/โรล (THB)<span>Avg/Roll</span></th>
                     <th>ความคุ้มค่า<span>Value Ratio</span></th>
                     <th>จำกัดซื้อ<span>Purchase Limit</span></th>
                     <th>สุ่มจำกัดเวลา (ครั้ง)<span>Event Pulls</span></th>
@@ -384,7 +392,7 @@
             <div class="sticky-price" id="sticky-thb">฿0</div>
         </div>
         <div class="sticky-pulls">
-            สุ่มรวม: <strong id="sticky-pulls" style="color:#4ade80;">0</strong> ครั้ง
+            สุ่มรวม: <strong id="sticky-pulls" style="color:#4ade80;">0</strong> ครั้ง (เฉลี่ย ฿<span id="sticky-avg">0</span>/โรล)
         </div>
     </div>
 
@@ -465,6 +473,7 @@
             tbody.innerHTML = '';
 
             packData.forEach((item, index) => {
+                const avgRoll = item.totalPulls > 0 ? (item.thb / item.totalPulls).toFixed(1) : '-';
                 const tr = document.createElement('tr');
                 tr.id = `row-${index}`;
                 tr.innerHTML = `
@@ -473,10 +482,10 @@
                     <td class="col-th"><strong>${item.th}</strong></td>
                     <td class="col-tw">${item.tw}</td>
                     <td class="col-en"><em>${item.en}</em></td>
-                    <td>$${item.ntd}</td>
-                    <td>฿${item.thb.toLocaleString()}</td>
-                    <td>$${item.usd.toFixed(2)}</td>
-                    <td>${item.costPolaris > 0 ? item.costPolaris + ' ดวง' : '-'}</td>
+                    <td class="col-th">฿${item.thb.toLocaleString()}</td>
+                    <td class="col-tw">$${item.ntd}</td>
+                    <td class="col-en">$${item.usd.toFixed(2)}</td>
+                    <td><span class="badge-avg">${avgRoll !== '-' ? '฿' + avgRoll : '-'}</span></td>
                     <td><span class="badge-percent">${item.percent}</span></td>
                     <td>${item.limit}</td>
                     <td>${item.tempPulls > 0 ? item.tempPulls + ' ครั้ง' : '-'}</td>
@@ -534,10 +543,12 @@
                 }
             });
 
+            const avgPerRollTotal = totalPulls > 0 ? (totalThb / totalPulls).toFixed(1) : '0';
+
             document.getElementById('total-thb').innerText = `฿${totalThb.toLocaleString()}`;
             document.getElementById('total-usd').innerText = `$${totalUsd.toFixed(2)}`;
             document.getElementById('total-ntd').innerText = `$${totalNtd.toLocaleString()}`;
-            document.getElementById('total-cost-polaris').innerText = `${totalCostPolaris.toLocaleString()} ดวง`;
+            document.getElementById('total-avg-roll').innerText = `฿${avgPerRollTotal} / โรล`;
             document.getElementById('total-temp-pulls').innerText = `${totalTempPulls.toLocaleString()} ครั้ง`;
             document.getElementById('total-perm-pulls').innerText = `${totalPermPulls.toLocaleString()} ครั้ง`;
             document.getElementById('total-pulls').innerText = `${totalPulls.toLocaleString()} ครั้ง`;
@@ -547,6 +558,7 @@
 
             document.getElementById('sticky-thb').innerText = `฿${totalThb.toLocaleString()}`;
             document.getElementById('sticky-pulls').innerText = `${totalPulls.toLocaleString()}`;
+            document.getElementById('sticky-avg').innerText = `${avgPerRollTotal}`;
         }
 
         function copyPromptText() {
